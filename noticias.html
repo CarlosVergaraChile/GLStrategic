@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Noticias - GL Strategic</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --cct-cyan: #00A3E0;
+      --navy: #002040;
+      --gray-light: #f8f9fa;
+      --gray-dark: #1a1a1a;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Montserrat', sans-serif;
+      line-height: 1.8;
+      color: var(--gray-dark);
+      background: #ffffff;
+    }
+    header {
+      background: white;
+      padding: 20px 40px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .header-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .logo {
+      font-size: 24px;
+      font-weight: 900;
+      color: var(--navy);
+    }
+    .logo span {
+      color: var(--cct-cyan);
+    }
+    .nav-links a {
+      color: var(--navy);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 14px;
+      margin-left: 30px;
+      transition: color 0.3s ease;
+    }
+    .nav-links a:hover {
+      color: var(--cct-cyan);
+    }
+    main {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 60px 40px;
+    }
+    h1 {
+      font-size: 48px;
+      font-weight: 900;
+      color: var(--navy);
+      margin-bottom: 10px;
+      line-height: 1.2;
+    }
+    .noticia-meta {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 40px;
+      color: #666;
+      font-size: 14px;
+    }
+    .noticia-image {
+      width: 100%;
+      max-width: 800px;
+      height: auto;
+      object-fit: contain;
+      border-radius: 8px;
+      margin: 40px auto;
+      display: none;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    .noticia-image.visible {
+      display: block;
+    }
+    .author-section {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 40px;
+      padding: 20px;
+      background: var(--gray-light);
+      border-radius: 8px;
+      border-left: 4px solid var(--cct-cyan);
+    }
+    .author-img {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+    .author-info h3 {
+      color: var(--navy);
+      margin-bottom: 5px;
+    }
+    .author-info p {
+      color: #666;
+      font-size: 14px;
+    }
+    .categoria {
+      display: inline-block;
+      background: var(--cct-cyan);
+      color: white;
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-bottom: 30px;
+    }
+    .content {
+      font-size: 16px;
+      line-height: 2;
+      color: #333;
+      margin-bottom: 40px;
+    }
+    .content p {
+      margin-bottom: 20px;
+    }
+    .back-button {
+      background: var(--cct-cyan);
+      color: white;
+      padding: 12px 30px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: 700;
+      display: inline-block;
+      transition: background 0.3s ease;
+    }
+    .back-button:hover {
+      background: #0087b8;
+    }
+    .loading {
+      text-align: center;
+      padding: 40px;
+      color: var(--cct-cyan);
+    }
+    .error {
+      background: #f8d7da;
+      color: #721c24;
+      padding: 20px;
+      border-radius: 6px;
+      margin: 20px 0;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-container">
+      <div class="logo">GL<span>Strategic</span></div>
+      <div class="nav-links">
+        <a href="index.html#inicio">Inicio</a>
+        <a href="index.html#noticias">Noticias</a>
+      </div>
+    </div>
+  </header>
+  <main id="noticia-container">
+    <div class="loading">Cargando noticia...</div>
+  </main>
+  <script>
+    // Datos de respaldo integrados (NOTICIAS_BACKUP del index.html)
+    const NOTICIAS_BACKUP = [
+      {
+        id: 1,
+        titulo: "Desarrollamos el Plan Maestro de Zofri al 2060 y Ecoparques",
+        extracto: "Desarrollamos el Plan Maestro de Zofri al 2060, incorporando el diseño de Ecoparques Industriales (EPI) mediante el uso de herramientas de prospectiva y mapas estratégicos.",
+        contenido_completo: "<p>Desarrollamos el Plan Maestro de Zofri al 2060, incorporando el diseño de Ecoparques Industriales (EPI) mediante el uso de herramientas de prospectiva y mapas estratégicos. Esta planificación permitió identificar oportunidades país en la creciente industria global de ecoparques industriales y en el corredor bioceánico por el paso de Jama, un hito histórico que se encuentra ad portas de concretarse. Los EPI son espacios previamente habilitados, con permisos esenciales ya obtenidos (como agua y energía), que permiten a los inversionistas instalar proyectos en plazos mucho más breves, evitando esperar hasta una década en procesos de tramitación individual de permisos.</p>",
+        categoria: "estrategia",
+        fecha: "2025-11-20",
+        autor: "Equipo GL Strategic",
+        rol: "Consultoría Estratégica",
+        imagen_autor: "default-avatar.jpg",
+        imagen: "zofri-ecoparques.png",
+        tipo: "comunicado",
+        url: "#"
+      },
+      {
+        id: 2,
+        titulo: "CAF, nueva institucionalidad para el desarrollo regional",
+        extracto: "Desarrollamos el Centro de Anticipación y Creación de Futuro (CAF), que permitió identificar cerca de 100 proyectos de desarrollo y dimensionar el gran impacto del Power Shoring.",
+        contenido_completo: "<p>Desarrollamos el Centro de Anticipación y Creación de Futuro (CAF), que permitió identificar cerca de 100 proyectos de desarrollo y dimensionar el gran impacto del Power Shoring.</p><p>Power Shoring consiste en atraer industrias intensivas en energía (producción de combustibles verdes o carbono neutrales, data centers, economía digital, blockchain mining, minería no metálica, recuperación de metales, producción de nitrato de amonio, desalación de agua, nuevas agroindustrias, acuicultura, industrias alimenticia y metalmecánica, entre muchas otras). A esto se suma la exportación de H2V (hidrógeno verde, producido sin contaminar) y sus derivados.</p><p>La estrategia es atraer inversión en estas industrias para que operen donde se genera la energía verde más barata del mundo, evitando así más que triplicar su costo al almacenarla y trasladarla a grandes distancias.</p><p>Chile sería así un País Plataforma para inversionistas de todos los continentes, generando inversión, empleo y encadenamientos productivos muy superiores a los que se lograrían solo exportando la energía.</p><p>El CAF apoya a los Gobiernos Regionales (GORE), municipalidades y otros actores clave, y contribuye a superar sus debilidades para definir y articular planes y proyectos de desarrollo local, mediante el aporte de redes de expertos en estos nuevos rubros y la atracción de inversionistas que hoy no existen a nivel local.</p>",
+        categoria: "transformacion",
+        fecha: "2025-10-15",
+        autor: "Equipo GL Strategic",
+        rol: "Consultoría Estratégica",
+        imagen_autor: "default-avatar.jpg",
+        imagen: "caf-desarrollo-regional.png",
+        tipo: "comunicado",
+        url: "#"
+      },
+      {
+        id: 3,
+        titulo: "Publicación de libro Estrategias de transformación digital",
+        extracto: "L'Huillier, Muñoz y Vega (Penguin Random House) se anticipan a la necesidad de integrar la estrategia con la transformación digital, entregando una metodología innovadora para este propósito.",
+        contenido_completo: "<p>L'Huillier, Muñoz y Vega (Penguin Random House) se anticipan a la necesidad de integrar la estrategia con la transformación digital, entregando una metodología innovadora para este propósito, considerando los cambios en la propuesta de valor y el modelo de negocios que genera la TD.</p><p>Este aporte ha sido de gran importancia, porque la estrategia es la primera prioridad y la Inteligencia Artificial y Transformación Digital la segunda en las agendas de los directorios, y deben diseñarse de manera conjunta (MIT, Harvard) (La Tercera, 13/12/25, encuesta LVM).</p>",
+        categoria: "liderazgo",
+        fecha: "2025-12-13",
+        autor: "Equipo GL Strategic",
+        rol: "Consultoría Estratégica",
+        imagen_autor: "default-avatar.jpg",
+        imagen: "libro-transformacion-digital.png",
+        tipo: "comunicado",
+        url: "#"
+      },
+      {
+        id: 4,
+        titulo: "Planes de desarrollo de comunidades para la minería",
+        extracto: "Nuestros socios G. L'Huillier, G. Muñoz y R. Sotil diseñan planes de desarrollo comunidades vinculadas a la industria minera en Andacollo, Tarapacá y Región Metropolitana.",
+        contenido_completo: "<p>Nuestros socios G. L'Huillier, G. Muñoz y R. Sotil diseñan planes de desarrollo comunidades vinculadas a la industria minera en Andacollo, Tarapacá y Región Metropolitana.</p>",
+        categoria: "estrategia",
+        fecha: "2025-09-10",
+        autor: "Equipo GL Strategic",
+        rol: "Consultoría Estratégica",
+        imagen_autor: "default-avatar.jpg",
+        imagen: "mina.png",
+        tipo: "comunicado",
+        url: "#"
+      },
+      {
+        id: 5,
+        titulo: "Desarrollo de solución para enfrentar en forma integrada la enorme cantidad de exigencias a las empresas",
+        extracto: "La Metodología de Diagnóstico y Transformación Anticipativa Manual CAM+/Pré-Futur es la primera solución que integra 14 capas organizacionales y 10 ámbitos normativos y de buenas prácticas.",
+        contenido_completo: "<p>La Metodología de Diagnóstico y Transformación Anticipativa Manual CAM+/Pré-Futur es la primera solución que integra 14 capas organizacionales y 10 ámbitos normativos y de buenas prácticas, con el fin de definir brechas y un plan de transformación anticipativa, a la medida y sistémico.</p>",
+        categoria: "transformacion",
+        fecha: "2025-08-05",
+        autor: "Equipo GL Strategic",
+        rol: "Consultoría Estratégica",
+        imagen_autor: "default-avatar.jpg",
+        imagen: "metodologia-cam.png",
+        tipo: "comunicado",
+        url: "#"
+      },
+      {
+        id: 6,
+        titulo: "Plan estratégico para tener ingeniería de clase mundial el año 2030",
+        extracto: "Nuestra firma asesoró a la Universidad de Concepción en el programa de Corfo \"Nueva Ingeniería para el 2030\".",
+        contenido_completo: "<p>Nuestra firma asesoró a la Universidad de Concepción en el programa de Corfo \"Nueva Ingeniería para el 2030\".</p><p>Este proyecto tiene como objetivo apoyar a las universidades chilenas que imparten carreras de Ingeniería Civil en el proceso de generación de planes estratégicos u hojas de ruta, destinados a transformar sus Escuelas de Ingeniería para llegar a ser de clase mundial, con especial foco en la tercera misión (vinculación con la sociedad) y en los ámbitos de investigación aplicada, desarrollo y transferencia de tecnología, innovación y emprendimiento con base en I+D+i.</p>",
+        categoria: "estrategia",
+        fecha: "2025-07-10",
+        autor: "Equipo GL Strategic",
+        rol: "Consultoría Estratégica",
+        imagen_autor: "default-avatar.jpg",
+        imagen: "udec-ingenieria.png",
+        tipo: "comunicado",
+        url: "#"
+      },
+      {
+        id: 7,
+        titulo: "Proyectos de nuestra firma premiados a nivel mundial",
+        extracto: "Chilectra, una de las cuatro empresas chilenas premiadas con el Palladium Balanced Scorecard Hall of Fame for Executing Strategy.",
+        contenido_completo: "<p>Chilectra, una de las cuatro empresas chilenas premiadas con el Palladium Balanced Scorecard Hall of Fame for Executing Strategy. Members of the Palladium Balanced Scorecard Hall of Fame for Executing Strategy exemplify best-practice Balanced Scorecard (BSC).</p>",
+        categoria: "liderazgo",
+        fecha: "2025-06-20",
+        autor: "Equipo GL Strategic",
+        rol: "Consultoría Estratégica",
+        imagen_autor: "default-avatar.jpg",
+        imagen: "chilectra-premio.png",
+        tipo: "comunicado",
+        url: "#"
+      },
+      {
+        id: 8,
+        titulo: "Exitoso MII de UAI dirigido por nuestro Socio Principal",
+        extracto: "En 2014, Alejandro Jadresic Decano de Ingeniería de la UAI, pide a Gastón L'Huillier que diseñe y sea el Director Académico del MII basándose en las necesidades futuras del PPCI.",
+        contenido_completo: "<p>En 2014, Alejandro Jadresic Decano de Ingeniería de la UAI, pide a Gastón L'Huillier que diseñe y sea el Director Académico del Magíster en Ingeniería Industrial de la UAI (MII) basándose en las necesidades de capital humano futuras identificadas por el PPCI, obteniendo 100% de referencias positivas por más de una década.</p>",
+        categoria: "liderazgo",
+        fecha: "2025-06-01",
+        autor: "Equipo GL Strategic",
+        rol: "Consultoría Estratégica",
+        imagen_autor: "default-avatar.jpg",
+        imagen: "mii-uai.png",
+        tipo: "comunicado",
+        url: "http://www.groupeloyal.cl/2014/03/exitoso-mii-de-uai-dirigido-por-nuestro.html"
+      },
+      {
+        id: 9,
+        titulo: "Proyecto País 2025: Anticipando los desafíos de Chile al 2040",
+        extracto: "El Colegio de Ingenieros presenta el Proyecto País III Volumen II, liderado por Gastón L'Huillier, con una nueva mirada al Chile del 2025 y propuestas para enfrentar escenarios complejos.",
+        contenido_completo: "<p>El Colegio de Ingenieros de Chile realizó el lanzamiento del libro Proyecto País III, Volumen II, presentando una nueva mirada al Chile del 2025 y entregando propuestas ante el nuevo escenario que diversos sectores están enfrentando.</p><p>Bajo la dirección ejecutiva de Gastón L'Huillier, el Proyecto País integra la inteligencia colectiva de más de 2.000 expertos y 115 comisiones técnicas que analizan tendencias globales, riesgos emergentes y oportunidades para el desarrollo nacional.</p><p>El proyecto aborda desafíos refundacionales de nuestra institucionalidad y cultura, considerando pérdidas de empleo, desastres naturales con mayor frecuencia, sequía y contaminación. Una de las principales recomendaciones es la reconstrucción de las redes de apoyo comunitario como paliativo de resiliencia ante los cambios venideros.</p><p>El Proyecto País ha sido reconocido por su capacidad predictiva, anticipando durante 12 años los principales cambios estructurales del país antes que el mercado y el gobierno, mediante el análisis de señales tempranas en la institucionalidad, cultura, política y sectores económicos.</p>",
+        categoria: "estrategia",
+        fecha: "2025-11-28",
+        autor: "Gastón L'Huillier",
+        rol: "Director Ejecutivo Proyecto País",
+        imagen_autor: "gaston_lhuillier_troncoso.png",
+        imagen: "proyecto-pais-2025.png",
+        tipo: "comunicado",
+        url: "https://www.ingenieros.cl/proyecto-pais/"
+      },
+      {
+        id: 10,
+        titulo: "GL Strategic pionera en metodología de transformación anticipativa en Chile",
+        extracto: "Como Socio Principal en GL Strategic, hacemos diagnóstico de brechas y transformaciones anticipativas para las nuevas tendencias y exigencias del mercado.",
+        contenido_completo: "<p>Como Socio Principal en GL Strategic, hacemos diagnóstico de brechas y transformaciones anticipativas para las nuevas tendencias y exigencias, lo que se complementa con nuestra labor en la Fundación para el Desarrollo Descentralizado ChileConTodo donde lideramos iniciativas estratégicas enfocadas en promover el desarrollo territorial.</p><p>Nuestra metodología CAM+ (Critical Adjustment Matrix) integra 14 componentes organizacionales clave con la metodología Pré-Futur de 7 etapas de transformación, permitiendo a las organizaciones no solo entender dónde están, sino anticipar dónde deben estar en un entorno volátil.</p><p>A diferencia de las grandes consultoras, trabajamos solo con consultores senior y socios, combinando conocimiento técnico, visión regional y precisión predictiva. Mientras gobierno y mercado reaccionan al pasado, GL Strategic anticipa el futuro, detectando señales tempranas con metodologías probadas.</p><p>Esta capacidad anticipativa nos ha permitido desarrollar proyectos estratégicos de desarrollo para las quince regiones del país y atracción de inversiones en 7 de ellas, además de participar en la formulación de planes de desarrollo en 70 sectores nacionales.</p>",
+        categoria: "transformacion",
+        fecha: "2025-12-11",
+        autor: "Gastón L'Huillier",
+        rol: "Socio Principal GL Strategic",
+        imagen_autor: "gaston_lhuillier_troncoso.png",
+        imagen: "gl-strategic-anticipacion.png",
+        tipo: "linkedin",
+        url: "#"
+      },
+      {
+        id: 11,
+        titulo: "ChileConTodo: Liderando el desarrollo descentralizado y territorial",
+        extracto: "Como Presidente de la Fundación ChileConTodo, lideramos iniciativas estratégicas enfocadas en promover el desarrollo territorial a través de toda Chile.",
+        contenido_completo: "<p>Como Presidente de la Fundación para el Desarrollo Descentralizado ChileConTodo, lideramos iniciativas estratégicas enfocadas en promover el desarrollo territorial, trabajando directamente con Gobiernos Regionales (GORE), municipalidades y actores clave del desarrollo local.</p><p>La Fundación ChileConTodo representa el compromiso de GL Strategic con el desarrollo descentralizado, apoyando a las regiones a superar sus debilidades para definir y articular planes y proyectos de desarrollo local mediante el aporte de redes de expertos y la atracción de inversionistas.</p><p>Nuestro ADN está profundamente enraizado en la resiliencia y la colaboración que caracterizan a Chile: una cultura forjada por la adversidad, la minga y la herencia mapuche. Esta identidad territorial y mestiza impulsa la innovación bajo presión y la gestión colectiva.</p><p>A través de ChileConTodo, facilitamos la entrada al mercado chileno con conocimiento territorial profundo, nuestra red de 2.000+ expertos del Proyecto País, y expertise en permisos, gobernanza y relaciones comunitarias, reduciendo riesgos y acelerando el time-to-market de proyectos estratégicos.</p>",
+        categoria: "estrategia",
+        fecha: "2025-12-05",
+        autor: "Gastón L'Huillier",
+        rol: "Presidente Fundación ChileConTodo",
+        imagen_autor: "gaston_lhuillier_troncoso.png",
+        imagen: "chile-con-todo.png",
+        tipo: "linkedin",
+        url: "#"
+      },
+      {
+        id: 12,
+        titulo: "Resiliencia comunitaria: El gran cambio social que necesita Chile",
+        extracto: "Chile pasó de tener una comunidad de redes extendidas en los años 80 a un alto nivel de individualismo. Urge reconstruir las redes de apoyo como paliativo de resiliencia.",
+        contenido_completo: "<p>En entrevista con Radio Duna, el Director Ejecutivo del Proyecto País del Colegio de Ingenieros, Gastón L'Huillier, analizó cómo Chile pasó de tener una comunidad de redes extendidas a nivel familiar y barrial en los años 80 a ubicarse en el segundo lugar de individualismo a nivel mundial en 2011.</p><p>El gran cambio social que propone el Proyecto País es reconstruir las redes de apoyo, donde las actividades dentro de la comunidad podrían ser un paliativo de resiliencia ante los desafíos del 2025 al 2040, incluyendo pérdidas de empleo, desastres naturales con mayor frecuencia, sequía y contaminación.</p><p>Chile tiene una cultura de capacidad de trabajar temas macro cuando hay amenazas, pero eso no es suficiente. Faltan redes de apoyo comunitario que puedan actuar como amortiguadores ante crisis sistémicas y cambios estructurales acelerados.</p><p>Esta visión se integra en el trabajo de GL Strategic, donde promovemos el desarrollo territorial considerando no solo aspectos económicos y técnicos, sino también la reconstrucción del tejido social como factor crítico de resiliencia y desarrollo sostenible.</p>",
+        categoria: "transformacion",
+        fecha: "2025-10-27",
+        autor: "Gastón L'Huillier",
+        rol: "Director Ejecutivo Proyecto País",
+        imagen_autor: "gaston_lhuillier_troncoso.png",
+        imagen: "resiliencia-comunitaria.png",
+        tipo: "comunicado",
+        url: "https://www.duna.cl/programa/nada-personal/2020/04/27/gaston-lhuillier-por-proyeccion-del-chile-las-actividades-dentro-de-una-comunidad-podrian-ser-un-paliativo-de-resiliencia/"
+      },
+      {
+        id: 13,
+        titulo: "Davos 2026: Chile y la arquitectura de poder en un orden fragmentado",
+        extracto: "Davos 2026 confirma una ruptura estructural del orden internacional. Para Chile, la integración económica deja de ser solo virtud y pasa a ser arquitectura de poder y supervivencia soberana.",
+        contenido_completo: "<p>El Foro Económico Mundial de Davos 2026 ha marcado el fin definitivo de la ortodoxia geopolítica del siglo XX. Durante las sesiones, figuras como Mark Carney han advertido que ya no estamos en una fase de transición, sino en una ruptura estructural del orden internacional basado en normas. Para potencias medias como Chile, el mensaje ha sido brutalmente honesto: \"si no estás sentado a la mesa, estás en el menú\". Este nuevo escenario exige que la integración económica deje de verse como una opción virtuosa y empiece a entenderse como una arquitectura de poder indispensable para la supervivencia soberana.</p><p>La paradoja actual es evidente: mientras Estados Unidos actúa como una \"potencia revolucionaria\" dispuesta a rediseñar las reglas a su favor, China emerge como una \"potencia conservadora\" que intenta preservar el libre comercio para proyectar su influencia. Chile, poseedor de activos críticos como cobre, litio y energías renovables, se encuentra en una posición de fuerza, pero solo si logra trascender su rol de proveedor primario. La estabilidad institucional que el país ha construido durante décadas ya no es suficiente; ahora se requiere una dirección estratégica que convierta estas ventajas en fuerza disuasiva y capacidad de negociación.</p><p>Desde la perspectiva de GL Strategic, el desafío para el país y sus empresas es dejar de actuar de forma fragmentada. La integración estratégica asunto por asunto es la única vía para evitar la subordinación. En un mundo donde el costo de la coerción es la nueva moneda de cambio, Chile debe integrarse productivamente con socios que compartan no solo valores, sino intereses operativos, transformando su geografía de límites en una plataforma de escala continental. El futuro de la soberanía nacional no se espera en los tratados internacionales del pasado; se diseña hoy en la mesa de las decisiones globales.</p>",
+        categoria: "estrategia",
+        fecha: "2026-01-15",
+        autor: "Equipo GL Strategic",
+        rol: "Geopolítica y Estrategia",
+        imagen_autor: "default-avatar.jpg",
+        imagen: "",
+        tipo: "comunicado",
+        url: "#"
+      },
+      {
+        id: 14,
+        titulo: "Metodología CAM+: liderar desde la integración y la anticipación",
+        extracto: "GL Strategic consolida CAM+ como estándar para anticipar crisis. Integra estrategia, regulación y cultura para detectar señales tempranas y alinear decisiones.",
+        contenido_completo: "<p>En un entorno empresarial marcado por la volatilidad extrema, GL Strategic ha consolidado la metodología CAM+ (Critical Adjustment Matrix) como el estándar para las organizaciones que buscan anticipar crisis en lugar de simplemente reaccionar ante ellas. El diagnóstico es claro: el problema de las empresas en Chile no es la complejidad del mercado, sino la falta de integración sistémica. Muchas organizaciones fallan porque sus áreas operan en \"carriles\" aislados, donde la regulación, la estrategia y la cultura no conversan entre sí, generando una fricción que detiene proyectos viables y agota el capital humano.</p><p>La matriz CAM+ permite medir la madurez adaptativa de una organización evaluando 12 áreas estratégicas clave, desde la disposición al cambio y la transformación digital hasta el compliance y la innovación. Este marco permite clasificar a las compañías en cuatro escenarios críticos: Excel (desempeño superior), Adhoc (reacción por crisis), Reborn (reinvención guiada) y RIP (riesgo de desaparición). Al usar esta herramienta, los directorios pueden detectar señales tempranas de disrupción y alinear sus procesos con la realidad institucional, reduciendo la resistencia cultural al cambio y optimizando la toma de decisiones.</p><p>Esta metodología no busca simplificar la realidad —lo cual sería irreal— sino integrar la inteligencia que la organización ya posee. Integrar significa que los conflictos se hacen visibles antes de estallar y que las decisiones dejan de ser reactivas para volverse proactivas. En el nuevo paradigma de GL Strategic, la estabilidad ya no se confunde con el éxito; la verdadera ventaja competitiva reside en la capacidad de rediseñar la trayectoria de desarrollo mientras el equilibrio aún se mantiene. El futuro es un espacio que se diseña mediante la arquitectura de sistemas integrados.</p>",
+        categoria: "transformacion",
+        fecha: "2026-01-20",
+        autor: "Equipo GL Strategic",
+        rol: "Estrategia y Gestión",
+        imagen_autor: "default-avatar.jpg",
+        imagen: "",
+        tipo: "comunicado",
+        url: "#"
+      },
+      {
+        id: 15,
+        titulo: "Revolución en el norte: de exportador de energía a país plataforma",
+        extracto: "Ecoparques Industriales para localizar ventaja: convertir energía barata en competitividad, industria y empleo calificado.",
+        contenido_completo: "<p>Chile se encuentra ante una oportunidad histórica que va mucho más allá de los rankings de producción de energía barata. La visión que impulsa GL Strategic, junto a expertos como Claus van der Molen Buchholz, propone un cambio de modelo: pasar de ser un proveedor de recursos a ser un \"País Plataforma\". Actualmente, el país regala parte de su ventaja absoluta al exportar energía como electricidad, hidrógeno o amoníaco sin transformación local. El costo de oportunidad es inmenso, ya que el valor agregado, la tecnología y el aprendizaje industrial terminan acumulándose en las economías de destino, mientras Chile asume los riesgos logísticos y de almacenamiento.</p><p>El modelo de Ecoparques Industriales surge como la solución para localizar la ventaja. Un ecoparque no es estética verde; es arquitectura productiva diseñada para capturar el valor de la energía renovable (que en el norte alcanza costos récord de 15 USD/MWh) y utilizarla localmente en procesos de manufactura avanzada, minería verde y procesamiento de datos. Al integrar flujos de energía, agua desalada y tratamiento de residuos en un solo ecosistema, se logran economías de escala que reducen los costos operativos a un tercio de lo que costaría la energía exportada, facilitando además la gestión sistémica de permisos y licencias ambientales.</p><p>Proyectos como los Parques Solares Regenerativos (PSR) en Canela y Arica demuestran que es posible combinar la potencia energética con la regeneración de suelos y el desarrollo comunitario. No se trata solo de instalar paneles, sino de anclar industrias al territorio. Los líderes de la nueva economía energética no son los que más exportan, sino los que más valor extraen de sus recursos. Si Chile no localiza su energía y sus capacidades, seguirá financiando el desarrollo de otros. La meta es clara: convertir la energía barata en un factor estructural de competitividad que diversifique la canasta exportadora y genere empleo de alta calificación.</p>",
+        categoria: "estrategia",
+        fecha: "2026-01-24",
+        autor: "Claus van der Molen Buchholz",
+        rol: "Energía y Territorio",
+        imagen_autor: "claus_van.png",
+        imagen: "",
+        tipo: "comunicado",
+        url: "#"
+      },
+      {
+        id: 16,
+        titulo: "La era agéntica: la IA como arquitecto de nuevas estrategias",
+        extracto: "La IA entra en fase agéntica: agentes autónomos ejecutan tareas complejas. El valor surge al rediseñar gobernanza y propuesta de valor, no solo automatizar.",
+        contenido_completo: "<p>La conversación en Davos 2026 entre los líderes de Google DeepMind y Anthropic ha confirmado que hemos entrado en la Fase 2 de la revolución cognitiva: la Era Agéntica. Hemos pasado de la etapa de \"chatear\" con la inteligencia artificial a una fase de colaboración activa donde agentes autónomos ejecutan tareas y resuelven problemas complejos sin supervisión constante. Para el mundo corporativo, este cambio significa que la IA ya no es una herramienta para modernizar la estrategia antigua; es una tecnología que obliga a cambiar la estrategia por completo, redefiniendo costos, escalas y modelos de negocio.</p><p>Como se plantea en el libro Estrategias de Transformación Digital (ETD) de Guillermo Muñoz y Pablo Vega, el error de diseño más costoso es usar la IA solo para automatizar procesos obsoletos. El impacto real ocurre cuando la tecnología obliga a revisar la gobernanza y la propuesta de valor. La IA agéntica permite hoy estrategias que antes eran imposibles, permitiendo a las empresas pasar de competir por precio a ofrecer soluciones integrales basadas en un conocimiento profundo y personalizado del cliente. Sin embargo, esta transformación exige condiciones rigurosas de estructura, cultura y sistemas de control para ser operativa.</p><p>El diseño estratégico y la transformación digital ya no pueden planificarse por separado. Las empresas que logren integrar herramientas como Cloud Computing, Big Data e IoT dentro de un nuevo diseño agéntico serán las que capturen el valor en la nueva economía. No se trata de una mejora incremental, sino de una ruptura en la lógica de creación de valor. En GL Strategic, entendemos que la IA no es el fin, sino el gran habilitador de sistemas complejos que permiten a las organizaciones escalar su impacto a niveles antes impensables. El diseño del mañana depende de la integración de estas mentes sintéticas en el núcleo de la decisión humana.</p>",
+        categoria: "transformacion",
+        fecha: "2026-01-28",
+        autor: "Equipo GL Strategic",
+        rol: "Transformación Digital",
+        imagen_autor: "default-avatar.jpg",
+        imagen: "",
+        tipo: "comunicado",
+        url: "#"
+      }
+];
+
+    async function cargarNoticia() {
+      try {
+        const params = new URLSearchParams(window.location.search);
+        const noticiaId = parseInt(params.get('id')) || 1;
+        
+        let noticias = NOTICIAS_BACKUP;
+        
+        // Intentar cargar desde JSON externo
+        try {
+          const response = await fetch('assets/data/noticias.json');
+          if (response.ok) {
+            const data = await response.json();
+            noticias = data.noticias || NOTICIAS_BACKUP;
+          }
+        } catch (e) {
+          console.log('Usando datos de respaldo integrados');
+        }
+        
+        const noticia = noticias.find(n => n.id === noticiaId);
+        
+        if (!noticia) {
+          document.getElementById('noticia-container').innerHTML = `
+            <div class="error">
+              <p><strong>Noticia no encontrada</strong></p>
+              <p>La noticia con ID ${noticiaId} no existe.</p>
+            </div>
+            <a href="index.html#noticias" class="back-button">← Volver a Noticias</a>
+          `;
+          return;
+        }
+        
+        const fechaObj = new Date(noticia.fecha);
+        const fechaFormato = fechaObj.toLocaleDateString('es-CL', { year: 'numeric', month: 'long', day: 'numeric' });
+        
+        let imagenHTML = '';
+        if (noticia.imagen) {
+          imagenHTML = `<div style="text-align: center; margin: 40px 0;"><img src="assets/images/${noticia.imagen}" alt="${noticia.titulo}" class="noticia-image visible" onerror="this.style.display='none'"></div>`;
+        }
+        
+        const html = `
+          <a href="index.html#noticias" class="back-button">← Volver a Noticias</a>
+          <h1>${noticia.titulo}</h1>
+          <div class="noticia-meta">
+            <span>📅 ${fechaFormato}</span>
+            <span>📂 ${noticia.categoria}</span>
+          </div>
+          <div class="author-section">
+            <img src="assets/images/${noticia.imagen_autor}" 
+                 alt="${noticia.autor}" 
+                 class="author-img" 
+                 onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(noticia.autor)}&background=00A3E0&color=fff&size=80'">
+            <div class="author-info">
+              <h3>${noticia.autor}</h3>
+              <p>${noticia.rol}</p>
+              <p>📅 ${fechaFormato}</p>
+            </div>
+          </div>
+          <div class="categoria">${noticia.categoria}</div>
+          <div class="content">
+            ${noticia.contenido_completo || `<p>${noticia.extracto}</p>`}
+          </div>
+          ${imagenHTML}
+          <a href="index.html#noticias" class="back-button">← Volver a Noticias</a>
+        `;
+        
+        document.getElementById('noticia-container').innerHTML = html;
+      } catch (error) {
+        console.error('Error:', error);
+        document.getElementById('noticia-container').innerHTML = `
+          <div class="error">
+            <p><strong>Error al cargar la noticia</strong></p>
+            <p>${error.message}</p>
+          </div>
+          <a href="index.html#noticias" class="back-button">← Volver a Noticias</a>
+        `;
+      }
+    }
+    
+    document.addEventListener('DOMContentLoaded', cargarNoticia);
+  </script>
+</body>
+</html>
