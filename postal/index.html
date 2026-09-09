@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PostalEye V31 — Simulador Operacional Correos</title>
+<style>
+:root{
+  --navy:#071527;--navy2:#0d1d33;--navy3:#132844;--ink:#edf3fb;--muted:#8aa1bd;--dim:#526985;
+  --orange:#ff6b2b;--orange2:#e65d22;--teal:#12c4a3;--green:#2ec27e;--yellow:#f4b740;--red:#e85d75;--blue:#5b9bd5;
+  --border:rgba(255,255,255,.10);--border2:rgba(255,255,255,.16);--card:rgba(13,29,51,.82);--bg2:#0a182b;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Inter,Roboto,Arial,sans-serif;background:var(--navy);color:var(--ink);min-height:100vh;overflow-x:hidden}
+body:before{content:"";position:fixed;inset:0;background:radial-gradient(circle at 20% 0%,rgba(255,107,43,.12),transparent 32%),radial-gradient(circle at 80% 10%,rgba(18,196,163,.09),transparent 32%),repeating-linear-gradient(0deg,transparent,transparent 39px,rgba(255,255,255,.025) 40px),repeating-linear-gradient(90deg,transparent,transparent 39px,rgba(255,255,255,.025) 40px);z-index:0;pointer-events:none}
+.app{position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column}.topbar{height:58px;background:rgba(7,21,39,.96);border-bottom:1px solid var(--border2);display:flex;align-items:center;gap:18px;padding:0 22px;position:sticky;top:0;z-index:20;backdrop-filter:blur(12px)}
+.brand{font-weight:900;letter-spacing:.08em;font-size:20px;color:#fff;display:flex;align-items:baseline;gap:8px}.brand span{color:var(--orange)}.brand-sub{font-size:10px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;font-weight:700}
+.selector-group{display:flex;gap:8px;margin-left:auto;align-items:center}.selector{background:#101f36;border:1px solid var(--border);border-radius:6px;padding:5px 8px;min-width:112px}.selector-label{font-size:9px;color:var(--dim);text-transform:uppercase;letter-spacing:.1em;font-weight:800}.selector-value,select{font-size:12px;color:#fff;font-weight:700}select{background:transparent;border:none;outline:none;width:100%}option{background:#101f36}.time{font-size:11px;color:var(--dim);font-family:Consolas,monospace}
+.shell{display:grid;grid-template-columns:292px 1fr;min-height:calc(100vh - 58px)}.sidebar{background:rgba(10,24,43,.88);border-right:1px solid var(--border);padding:16px 14px;position:sticky;top:58px;height:calc(100vh - 58px);overflow:auto}.main{padding:18px;min-width:0}.side-title{font-size:11px;color:var(--muted);font-weight:900;letter-spacing:.12em;text-transform:uppercase;margin:6px 0 10px}.module-badge{font-size:10px;color:var(--orange);border:1px solid rgba(255,107,43,.35);background:rgba(255,107,43,.1);border-radius:4px;padding:4px 8px;display:inline-block;margin-bottom:10px;font-weight:900;letter-spacing:.08em;text-transform:uppercase}.module-switch{display:grid;grid-template-columns:1fr;gap:6px;margin-bottom:12px}.mod-btn{border:1px solid var(--border);background:#0e1f36;color:var(--muted);font-weight:800;font-size:11px;text-align:left;border-radius:5px;padding:8px;cursor:pointer;transition:.15s}.mod-btn:hover{border-color:rgba(255,107,43,.45);color:#fff}.mod-btn.active{background:rgba(255,107,43,.12);border-color:var(--orange);color:var(--orange)}
+.slider-box{background:#0d1c31;border:1px solid var(--border);border-radius:8px;padding:10px;margin-bottom:8px}.slider-head{display:flex;justify-content:space-between;gap:8px;align-items:flex-start;margin-bottom:7px}.slider-label{font-size:12px;color:#dbe8f5;font-weight:700;line-height:1.25}.slider-val{font-size:12px;color:var(--orange);font-weight:900;font-family:Consolas,monospace;white-space:nowrap}.slider-note{font-size:10px;color:var(--dim);line-height:1.35;margin-top:5px}input[type=range]{width:100%;appearance:none;height:4px;background:#1f314c;border-radius:3px;outline:none}input[type=range]::-webkit-slider-thumb{appearance:none;width:15px;height:15px;border-radius:50%;background:var(--orange);box-shadow:0 0 8px rgba(255,107,43,.6);cursor:pointer}.range-minmax{display:flex;justify-content:space-between;font-size:9px;color:var(--dim);margin-top:4px}.nav-section{margin-top:14px;padding-top:12px;border-top:1px solid var(--border)}.nav-btn{display:block;width:100%;background:transparent;border:1px solid transparent;color:var(--muted);padding:8px 10px;border-radius:5px;text-align:left;font-weight:800;font-size:12px;cursor:pointer;margin-bottom:4px}.nav-btn.active,.nav-btn:hover{background:rgba(18,196,163,.09);border-color:rgba(18,196,163,.25);color:var(--teal)}
+.kpi-strip{display:grid;grid-template-columns:repeat(6,minmax(130px,1fr));gap:1px;background:var(--border);border:1px solid var(--border2);border-radius:8px;overflow:hidden;margin-bottom:14px}.kpi{background:var(--navy2);padding:12px 13px}.kpi-label{font-size:10px;color:var(--dim);font-weight:900;text-transform:uppercase;letter-spacing:.11em;margin-bottom:5px}.kpi-val{font-size:22px;font-weight:900;letter-spacing:-.02em;line-height:1;color:#fff}.kpi-val.orange{color:var(--orange)}.kpi-val.green{color:var(--green)}.kpi-val.yellow{color:var(--yellow)}.kpi-val.red{color:var(--red)}.kpi-sub{font-size:10px;color:var(--dim);margin-top:5px}.tab-bar{display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:14px;overflow:auto}.tab{background:transparent;border:none;color:var(--dim);font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.08em;padding:12px 16px;border-bottom:2px solid transparent;cursor:pointer;white-space:nowrap}.tab.active{color:var(--orange);border-bottom-color:var(--orange)}.content{display:none;animation:fade .18s ease}.content.active{display:block}@keyframes fade{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+.grid2{display:grid;grid-template-columns:1.4fr 1fr;gap:14px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.panel{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:14px;backdrop-filter:blur(5px);margin-bottom:14px}.panel-title{font-size:12px;color:var(--muted);font-weight:900;letter-spacing:.12em;text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:6px}.panel-note{font-size:11px;color:var(--dim);line-height:1.45}.big-num{font-size:38px;font-weight:900;letter-spacing:-.04em;line-height:1}.small{font-size:11px;color:var(--dim);line-height:1.45}.pill{display:inline-flex;align-items:center;gap:5px;border:1px solid var(--border);border-radius:999px;padding:3px 8px;font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:.08em}.pill.green{border-color:rgba(46,194,126,.35);color:var(--green);background:rgba(46,194,126,.08)}.pill.yellow{border-color:rgba(244,183,64,.35);color:var(--yellow);background:rgba(244,183,64,.08)}.pill.red{border-color:rgba(232,93,117,.35);color:var(--red);background:rgba(232,93,117,.08)}.pill.orange{border-color:rgba(255,107,43,.35);color:var(--orange);background:rgba(255,107,43,.08)}
+.process-map{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}.stage{background:#0d1c31;border:1px solid var(--border);border-radius:8px;padding:11px;position:relative;min-height:142px}.stage:after{content:"→";position:absolute;right:-13px;top:50%;transform:translateY(-50%);color:var(--orange);font-size:18px;font-weight:900}.stage:last-child:after{display:none}.stage-head{font-size:12px;color:#fff;font-weight:900;margin-bottom:8px}.stage-metric{display:flex;justify-content:space-between;border-top:1px solid rgba(255,255,255,.06);padding:6px 0;font-size:10px;color:var(--muted)}.stage-metric b{color:#fff;font-family:Consolas,monospace}.bar{height:6px;background:#1d304b;border-radius:4px;overflow:hidden;margin-top:5px}.bar span{display:block;height:100%;border-radius:4px;background:var(--teal);transition:width .25s}.bar span.warn{background:var(--yellow)}.bar span.bad{background:var(--red)}.bar span.ok{background:var(--green)}
+.causal-wrap{overflow:auto}.causal-svg{width:100%;min-width:900px;height:450px;background:#071222;border:1px solid var(--border);border-radius:8px}.node{cursor:pointer}.node rect{fill:#0d1c31;stroke-width:1.5}.node text{font-family:Inter,Arial,sans-serif}.link{fill:none;stroke-width:2;opacity:.65}.node-panel{display:none;background:#0d1c31;border:1px solid rgba(18,196,163,.25);border-radius:8px;padding:12px;margin-top:10px}.node-panel.visible{display:block}.node-panel h4{color:var(--teal);font-size:13px;margin-bottom:6px}.node-panel p{font-size:11px;color:#cdd9e6;line-height:1.45}
+table{width:100%;border-collapse:collapse;font-size:11px}th{font-size:9px;color:var(--dim);text-transform:uppercase;letter-spacing:.1em;text-align:left;padding:8px;border-bottom:1px solid var(--border);background:rgba(255,255,255,.02)}td{padding:8px;border-bottom:1px solid rgba(255,255,255,.06);vertical-align:top;color:#dbe8f5}tr:hover td{background:rgba(255,255,255,.02)}.pos{color:var(--green);font-weight:900}.neg{color:var(--red);font-weight:900}.neu{color:var(--yellow);font-weight:900}.muted{color:var(--dim)}.btn{border:1px solid var(--orange);background:rgba(255,107,43,.1);color:var(--orange);font-weight:900;border-radius:5px;padding:7px 11px;font-size:11px;cursor:pointer;text-transform:uppercase;letter-spacing:.06em}.btn:hover{background:rgba(255,107,43,.2)}.btn.secondary{border-color:rgba(18,196,163,.45);color:var(--teal);background:rgba(18,196,163,.08)}.btn-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.scenario-cards{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:12px}.scenario-card{border:1px solid var(--border);background:#0d1c31;border-radius:8px;padding:10px;cursor:pointer}.scenario-card.active{border-color:var(--orange);background:rgba(255,107,43,.11)}.scenario-card h4{font-size:12px;color:#fff;margin-bottom:4px}.scenario-card p{font-size:10px;color:var(--dim);line-height:1.35}.action-card{display:grid;grid-template-columns:32px 1fr auto;gap:10px;align-items:center;background:#0d1c31;border:1px solid var(--border);border-radius:8px;padding:10px;margin-bottom:8px}.rank{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(255,107,43,.14);border:1px solid rgba(255,107,43,.35);color:var(--orange);font-weight:900}.action-title{font-size:12px;font-weight:900;color:#fff}.action-desc{font-size:10px;color:var(--muted);line-height:1.4;margin-top:3px}.action-val{text-align:right;font-family:Consolas,monospace;font-weight:900;color:var(--teal)}.waterfall{display:flex;align-items:end;gap:6px;height:160px;padding:12px 4px;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}.wf-bar{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:4px}.wf-col{width:100%;border-radius:4px 4px 0 0;min-height:8px;background:var(--teal)}.wf-col.neg{background:var(--red)}.wf-label{font-size:9px;color:var(--dim);text-align:center;min-height:24px}.wf-val{font-size:10px;color:#fff;font-family:Consolas,monospace}.csv-box{border:1px dashed rgba(18,196,163,.45);background:rgba(18,196,163,.06);border-radius:8px;padding:13px}.csv-box input{font-size:11px;color:var(--muted)}.summary-line{display:flex;justify-content:space-between;gap:8px;border-bottom:1px solid rgba(255,255,255,.06);padding:7px 0;font-size:11px;color:var(--muted)}.summary-line b{color:#fff}.risk-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.risk-card{background:#0d1c31;border:1px solid var(--border);border-left:3px solid var(--yellow);border-radius:6px;padding:10px}.risk-card.red{border-left-color:var(--red)}.risk-card.green{border-left-color:var(--green)}.risk-card h4{font-size:12px;color:#fff;margin-bottom:5px}.risk-card p{font-size:10px;color:var(--muted);line-height:1.35}.footer-note{font-size:10px;color:var(--dim);margin-top:10px;line-height:1.4}
+@media(max-width:1100px){.shell{grid-template-columns:1fr}.sidebar{position:static;height:auto}.kpi-strip{grid-template-columns:repeat(2,1fr)}.grid2,.grid3,.process-map,.scenario-cards,.risk-grid{grid-template-columns:1fr}.stage:after{display:none}.selector-group{display:none}}
+@media print{body{background:#fff;color:#111}.topbar,.sidebar,.tab-bar,#kpiStrip,.no-print{display:none!important}.shell{display:block}.main{padding:0}.content{display:none!important}#boardroom{display:block!important}.panel{background:#fff;color:#111;border:1px solid #ccc;break-inside:avoid}.panel-title,.small,.panel-note,.muted,td,th{color:#111!important}.app:before,body:before{display:none}}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="topbar">
+    <div class="brand">Postal<span>Eye</span><div class="brand-sub">V31 · Simulador operacional Correos</div></div>
+    <div class="selector-group">
+      <div class="selector"><div class="selector-label">Empresa</div><div class="selector-value">CorreoRed Chile</div></div>
+      <div class="selector"><div class="selector-label">Escenario</div><select id="scenarioSelect" onchange="applyScenario(this.value)"></select></div>
+      <div class="selector"><div class="selector-label">Modelo</div><div class="selector-value">Standalone</div></div>
+    </div>
+    <div class="time" id="clock">--:--</div>
+  </div>
+  <div class="shell">
+    <aside class="sidebar">
+      <div class="side-title">Módulos operativos</div>
+      <div class="module-switch" id="moduleSwitch"></div>
+      <div class="module-badge" id="moduleBadge">—</div>
+      <div id="sliders"></div>
+      <div class="nav-section">
+        <div class="side-title">Navegación</div>
+        <button class="nav-btn active" onclick="switchTab('executive', this)">Ejecutiva</button>
+        <button class="nav-btn" onclick="switchTab('simulator', this)">Simulador</button>
+        <button class="nav-btn" onclick="switchTab('processes', this)">Procesos</button>
+        <button class="nav-btn" onclick="switchTab('chains', this)">Cadenas</button>
+        <button class="nav-btn" onclick="switchTab('plan', this)">Plan Acción</button>
+        <button class="nav-btn" onclick="switchTab('evidence', this)">Evidencia</button>
+        <button class="nav-btn" onclick="switchTab('boardroom', this)">Boardroom</button>
+      </div>
+    </aside>
+    <main class="main">
+      <div class="kpi-strip" id="kpiStrip"></div>
+      <div class="tab-bar no-print">
+        <button class="tab active" onclick="switchTab('executive')">Ejecutiva</button>
+        <button class="tab" onclick="switchTab('simulator')">Simulador</button>
+        <button class="tab" onclick="switchTab('processes')">Procesos</button>
+        <button class="tab" onclick="switchTab('chains')">Cadenas</button>
+        <button class="tab" onclick="switchTab('plan')">Plan Acción</button>
+        <button class="tab" onclick="switchTab('evidence')">Evidencia</button>
+        <button class="tab" onclick="switchTab('boardroom')">Boardroom</button>
+      </div>
+
+      <section id="executive" class="content active">
+        <div class="grid2">
+          <div class="panel">
+            <div class="panel-title">Resumen ejecutivo operacional</div>
+            <div id="execSummary"></div>
+          </div>
+          <div class="panel">
+            <div class="panel-title">Diagnóstico de riesgo</div>
+            <div id="riskSummary"></div>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="panel-title">Mapa de proceso y capacidad diaria</div>
+          <div class="process-map" id="processMap"></div>
+        </div>
+        <div class="grid3" id="execCards"></div>
+      </section>
+
+      <section id="simulator" class="content">
+        <div class="panel">
+          <div class="panel-title">Escenarios operacionales</div>
+          <div class="scenario-cards" id="scenarioCards"></div>
+          <div class="btn-row"><button class="btn secondary" onclick="freezeBaseline()">Congelar baseline</button><button class="btn" onclick="clearBaseline()">Limpiar baseline</button><button class="btn secondary" onclick="resetBase()">Reset base</button></div>
+          <div class="footer-note" id="baselineNote">Sin baseline congelado: comparación contra el escenario Base.</div>
+        </div>
+        <div class="grid2">
+          <div class="panel"><div class="panel-title">Comparación contra base / baseline</div><div id="comparePanel"></div></div>
+          <div class="panel"><div class="panel-title">Waterfall de impacto</div><div class="waterfall" id="waterfall"></div></div>
+        </div>
+      </section>
+
+      <section id="processes" class="content">
+        <div class="panel">
+          <div class="panel-title">Grafo causal postal</div>
+          <div class="causal-wrap"><svg class="causal-svg" id="causalSvg" viewBox="0 0 980 450"></svg></div>
+          <div class="node-panel" id="nodePanel"><h4 id="nodeTitle">—</h4><p id="nodeText">—</p></div>
+        </div>
+        <div class="grid2">
+          <div class="panel"><div class="panel-title">Capacidad por etapa</div><table><thead><tr><th>Etapa</th><th>Demanda</th><th>Capacidad</th><th>Utilización</th><th>Backlog</th></tr></thead><tbody id="capacityBody"></tbody></table></div>
+          <div class="panel"><div class="panel-title">Dotación estimada</div><div id="staffPanel"></div></div>
+        </div>
+      </section>
+
+      <section id="chains" class="content">
+        <div class="grid2">
+          <div class="panel"><div class="panel-title">Cadenas causales principales</div><div id="chainPanel"></div></div>
+          <div class="panel"><div class="panel-title">Matriz de riesgos operacionales</div><div class="risk-grid" id="riskGrid"></div></div>
+        </div>
+      </section>
+
+      <section id="plan" class="content">
+        <div class="panel">
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:10px"><div class="panel-title" style="margin:0">Plan de acción dinámico</div><button class="btn secondary" onclick="exportPlanCSV()">Exportar CSV</button></div>
+          <div id="combinedBox"></div>
+          <div id="actionPlan"></div>
+        </div>
+      </section>
+
+      <section id="evidence" class="content">
+        <div class="grid2">
+          <div class="panel"><div class="panel-title">Supuestos del motor</div><div id="assumptions"></div></div>
+          <div class="panel"><div class="panel-title">Carga de datos reales</div><div class="csv-box"><p class="small" style="margin-bottom:8px">CSV opcional para calibrar variables. Encabezados aceptados: <b>dailyVolume, massShare, preclassified, manifestQuality, branchDaily, ocrAuto, ocrManualOps, classOps, carters, deliveryRate</b>.</p><input type="file" id="csvInput" accept=".csv,text/csv" onchange="handleCSV(event)"><div id="csvStatus" class="footer-note"></div></div></div>
+        </div>
+        <div class="panel"><div class="panel-title">Registro de trazabilidad</div><table><thead><tr><th>Variable</th><th>Uso</th><th>Valor base</th><th>Comentario</th></tr></thead><tbody id="traceBody"></tbody></table></div>
+      </section>
+
+      <section id="boardroom" class="content">
+        <div class="grid2">
+          <div class="panel"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px"><div class="panel-title" style="margin:0">Boardroom report</div><button class="btn secondary no-print" onclick="window.print()">PDF directorio</button></div><div id="brHeadline" style="margin-top:12px"></div></div>
+          <div class="panel"><div class="panel-title">Nivel de riesgo</div><div id="brRisk"></div></div>
+        </div>
+        <div class="grid2">
+          <div class="panel"><div class="panel-title">Top 3 palancas</div><div id="brLevers"></div></div>
+          <div class="panel"><div class="panel-title">Escenarios comparados</div><table><thead><tr><th>Escenario</th><th>SLA</th><th>Backlog</th><th>Costo/envío</th><th>Resultado/día</th></tr></thead><tbody id="scenarioBody"></tbody></table></div>
+        </div>
+        <div class="panel"><div class="panel-title">Recomendación ejecutiva</div><div id="brRecommendation"></div></div>
+      </section>
+    </main>
+  </div>
+</div>
+<script>
+const ASSUMPTIONS = {
+  workHours: 8,
+  branchMinutesDay: 420,
+  envPerSaca: 67,
+  envPerBin: 420,
+  laborCostDay: 45000,
+  branchLaborAllocation: 0.35,
+  transportCostPerEnv: 210,
+  storageCostPerBinDay: 1800,
+  retryCostPerEnv: 650,
+  revenuePerEnv: 2200,
+  targetSLA: 92,
+  baseLeadHours: 18
+};
+
+const MODULES = {
+  mass:{icon:'📦',name:'Admisión cargas masivas',vars:[
+    ['dailyVolume','Volumen diario total',40000,10000,100000,1000,'env/día','Volumen postal/CEP que entra al sistema.'],
+    ['massShare','% carga masiva empresas',70,30,95,1,'%','Participación de grandes impositores y clientes empresas.'],
+    ['preclassified','% preclasificado origen',42,0,90,1,'%','Carga que llega preordenada por comuna, sector o ruta.'],
+    ['manifestQuality','Calidad datos manifiesto',65,20,100,1,'%','Completitud de datos para admisión, tracking, aviso y encaminamiento.'],
+    ['massOps','Operadores admisión masiva',7,1,30,1,'pers.','Dotación dedicada a recepción, apertura, etiquetado y validación.'],
+    ['labelOps','Operadores etiquetado tracking',3,0,20,1,'pers.','Dotación para envíos sin etiqueta de seguimiento.']
+  ]},
+  branch:{icon:'🏤',name:'Admisión en sucursales',vars:[
+    ['branches','Sucursales activas',30,5,120,1,'suc.','Puntos habilitados para admisión, pago, retiro o regularización.'],
+    ['branchDaily','Envíos por sucursal/día',90,10,600,10,'env','Carga media diaria por sucursal.'],
+    ['branchStaff','Dotación por sucursal',2,1,6,1,'pers.','Personal asignado a atención/operación asociada.'],
+    ['serviceMin','Tiempo atención por envío',2.6,0.5,8,0.1,'min','Tiempo medio para recibir, validar, cobrar o entregar.'],
+    ['webPayment','% pago / aviso digital',66,10,98,1,'%','Pagos y regularizaciones resueltas sin ir a sucursal.'],
+    ['branchStockDays','Días stock en sucursal',4,0,15,1,'días','Permanencia promedio de envíos retenidos o por retirar.']
+  ]},
+  sort:{icon:'🔎',name:'Clasificación manual / OCR',vars:[
+    ['withTracking','% con tracking origen',60,10,100,1,'%','Envíos que no requieren etiqueta adicional.'],
+    ['ocrAuto','Éxito OCR automático',90,40,99,1,'%','Lectura automática de datos de destinatario.'],
+    ['cameras','Cámaras OCR',6,1,20,1,'cam.','Capacidad automática de captura y lectura.'],
+    ['ocrManualOps','Operadores OCR manual',6,0,30,1,'pers.','Dotación que corrige o ingresa datos no leídos por OCR.'],
+    ['classOps','Operadores clasificación manual',8,1,40,1,'pers.','Dotación de separación, clasificación y preparación de despacho.'],
+    ['sortQuality','Calidad clasificación',86,50,99,1,'%','Exactitud de comuna, sector, cuartel, sucursal o canal de distribución.']
+  ]},
+  distribution:{icon:'🚚',name:'Distribución',vars:[
+    ['carters','Carteros activos',180,40,500,5,'pers.','Capacidad principal para distribución domiciliaria.'],
+    ['carterProd','Productividad cartero',55,20,110,1,'env/día','Envíos entregados o gestionados por cartero/día.'],
+    ['oversize','% derivado a flota CEP',15,0,45,1,'%','Carga no apta para cartero por tamaño, peso o servicio.'],
+    ['fleetCap','Capacidad flota CEP',3200,500,20000,100,'env/día','Capacidad diaria de distribución especializada.'],
+    ['deliveryRate','Tasa entrega efectiva',94,70,99,1,'%','Intentos exitosos sobre carga puesta a distribución.'],
+    ['secondAttempt','% segundo intento',6,0,25,1,'%','Proporción que exige nueva visita o gestión posterior.']
+  ]},
+  stock:{icon:'🧱',name:'Stock, vencimientos y retorno',vars:[
+    ['holdDays','Días retención central',5,0,20,1,'días','Tiempo promedio de espera antes de liberar, vencer o derivar.'],
+    ['expiryDays','Días a vencimiento',15,3,45,1,'días','Horizonte antes de devolución o cierre del ciclo.'],
+    ['unpaidRate','% no pagado/no retirado',12,0,45,1,'%','Carga que no se libera oportunamente.'],
+    ['binsCapacity','Capacidad bodega',800,100,3000,50,'bins','Capacidad física para stock centralizado.'],
+    ['returnRate','% retorno remitente',5,0,30,1,'%','Envíos devueltos por vencimiento, rechazo o imposibilidad de entrega.'],
+    ['lossRisk','Riesgo pérdida/merma',0.25,0,3,0.05,'%','Probabilidad operativa asociada a manipulación, stock y reproceso.']
+  ]}
+};
+
+const BASE = {
+  dailyVolume:40000,massShare:70,preclassified:42,manifestQuality:65,massOps:7,labelOps:3,
+  branches:30,branchDaily:90,branchStaff:2,serviceMin:2.6,webPayment:66,branchStockDays:4,
+  withTracking:60,ocrAuto:90,cameras:6,ocrManualOps:6,classOps:8,sortQuality:86,
+  carters:180,carterProd:55,oversize:15,fleetCap:3200,deliveryRate:94,secondAttempt:6,
+  holdDays:5,expiryDays:15,unpaidRate:12,binsCapacity:800,returnRate:5,lossRisk:.25
+};
+let INPUTS = {...BASE};
+let ACTIVE_MODULE = 'mass';
+let STATE = null;
+let BASELINE = null;
+const SCENARIOS = {
+  base:{name:'Base',desc:'Operación referencial',vals:{...BASE}},
+  peak:{name:'Peak carga',desc:'Alta demanda y presión en bodega',vals:{dailyVolume:65000,branchDaily:140,preclassified:35,ocrAuto:84,carters:190,fleetCap:3800,holdDays:8,unpaidRate:16}},
+  automation:{name:'Automatización',desc:'Mejor OCR y preclasificación',vals:{preclassified:68,manifestQuality:84,withTracking:78,ocrAuto:96,sortQuality:94,webPayment:82}},
+  branches:{name:'Estrés sucursales',desc:'Mayor retiro/pago presencial',vals:{webPayment:38,branchDaily:260,branchStockDays:8,branches:30,serviceMin:3.8,unpaidRate:20}},
+  distribution:{name:'Cuello distribución',desc:'Limitación de carteros/flota',vals:{carters:140,carterProd:48,fleetCap:2200,oversize:24,deliveryRate:88,secondAttempt:13}}
+};
+
+function clamp(x,min,max){return Math.max(min,Math.min(max,x))}
+function fmt(n){return Math.round(n).toLocaleString('es-CL')}
+function money(n){return '$'+Math.round(n).toLocaleString('es-CL')}
+function m(n,d=1){return n.toFixed(d).replace('.',',')}
+function pct(n,d=0){return n.toFixed(d).replace('.',',')+'%'}
+function sum(arr){return arr.reduce((a,b)=>a+b,0)}
+
+function simulate(inp){
+  const total = inp.dailyVolume;
+  const massDemand = total * inp.massShare/100;
+  const branchDemand = inp.branches * inp.branchDaily;
+  const branchShareTraffic = clamp(branchDemand/Math.max(total,1),0,0.55);
+  const preclassFactor = 1 + inp.preclassified/100*0.25 + inp.manifestQuality/100*0.12;
+  const massCap = inp.massOps * 3500 * preclassFactor;
+  const labelDemand = total * (100-inp.withTracking)/100;
+  const labelCap = inp.labelOps * 5000;
+  const branchCap = inp.branches * inp.branchStaff * (ASSUMPTIONS.branchMinutesDay / inp.serviceMin) * (0.62 + inp.webPayment/100*0.22);
+  const cameraCap = inp.cameras * 20 * 60 * ASSUMPTIONS.workHours;
+  const ocrManualDemand = total * (100-inp.ocrAuto)/100 + Math.max(0,total-cameraCap)*0.25;
+  const ocrManualCap = inp.ocrManualOps * 120 * ASSUMPTIONS.workHours;
+  const sortFactor = 1 + inp.preclassified/100*0.32 + inp.sortQuality/100*0.16;
+  const sortCap = inp.classOps * 10000 * sortFactor;
+  const oversizedDemand = total * inp.oversize/100;
+  const carterDemand = total - oversizedDemand;
+  const carterCap = inp.carters * inp.carterProd;
+  const fleetCap = inp.fleetCap;
+  const deliveryCap = carterCap + fleetCap;
+  const centralStock = total * inp.holdDays * (inp.unpaidRate/100 + (100-inp.webPayment)/100*0.08);
+  const branchStock = branchDemand * inp.branchStockDays * (100-inp.webPayment)/100;
+  const binsNeeded = Math.ceil(centralStock/ASSUMPTIONS.envPerBin);
+  const backlogs = {
+    admisionMasiva: Math.max(0, massDemand - massCap),
+    sucursales: Math.max(0, branchDemand - branchCap),
+    etiquetado: Math.max(0, labelDemand - labelCap),
+    ocrManual: Math.max(0, ocrManualDemand - ocrManualCap),
+    clasificacion: Math.max(0, total - sortCap),
+    distribucion: Math.max(0, carterDemand - carterCap) + Math.max(0, oversizedDemand - fleetCap),
+    bodega: Math.max(0, binsNeeded - inp.binsCapacity) * ASSUMPTIONS.envPerBin
+  };
+  const backlogTotal = sum(Object.values(backlogs));
+  const bottleneckRatio = Math.min(massCap/Math.max(massDemand,1), branchCap/Math.max(branchDemand,1), labelCap/Math.max(labelDemand,1), ocrManualCap/Math.max(ocrManualDemand,1), sortCap/total, deliveryCap/total, inp.binsCapacity/Math.max(binsNeeded,1));
+  const manualDependency = (ocrManualDemand + labelDemand + total*(100-inp.preclassified)/100*0.25)/total;
+  const branchOverload = Math.max(0, branchDemand/Math.max(branchCap,1)-1);
+  const backlogDays = backlogTotal/Math.max(total,1);
+  const leadHours = ASSUMPTIONS.baseLeadHours + backlogDays*18 + manualDependency*5 + branchOverload*7 + Math.max(0,binsNeeded/inp.binsCapacity-1)*12;
+  const sla = clamp(98 - Math.max(0,leadHours-24)*1.7 - backlogDays*32 - inp.lossRisk*2 + (inp.webPayment-60)*0.08, 35, 99);
+  const deliveredDemand = Math.min(carterDemand,carterCap)+Math.min(oversizedDemand,fleetCap);
+  const delivered = deliveredDemand * inp.deliveryRate/100;
+  const secondAttemptVolume = deliveredDemand * inp.secondAttempt/100;
+  const returned = total * inp.returnRate/100 + total * inp.unpaidRate/100*0.18;
+  const staff = inp.massOps+inp.labelOps+inp.ocrManualOps+inp.classOps+inp.carters + inp.branches*inp.branchStaff*ASSUMPTIONS.branchLaborAllocation + Math.ceil(inp.fleetCap/80);
+  const laborCost = staff * ASSUMPTIONS.laborCostDay;
+  const transportCost = (deliveredDemand+returned) * ASSUMPTIONS.transportCostPerEnv;
+  const retryCost = secondAttemptVolume * ASSUMPTIONS.retryCostPerEnv;
+  const storageCost = (binsNeeded+Math.ceil(branchStock/ASSUMPTIONS.envPerBin))*ASSUMPTIONS.storageCostPerBinDay;
+  const lossCost = total * inp.lossRisk/100 * 18000;
+  const totalCost = laborCost+transportCost+retryCost+storageCost+lossCost;
+  const processed = Math.min(total, massCap + (total-massDemand), sortCap, deliveryCap + returned + centralStock/Math.max(inp.holdDays,1));
+  const revenue = delivered * ASSUMPTIONS.revenuePerEnv;
+  const result = revenue - totalCost;
+  const costPerEnv = totalCost/Math.max(delivered,1);
+  const digitalIndex = clamp((inp.webPayment*.25 + inp.ocrAuto*.25 + inp.withTracking*.20 + inp.preclassified*.20 + inp.manifestQuality*.10),0,100);
+  const riskScore = clamp((100-sla)*0.9 + backlogDays*55 + Math.max(0,binsNeeded/inp.binsCapacity-1)*28 + branchOverload*20 + manualDependency*10 + inp.lossRisk*6, 0, 100);
+  const stages = [
+    {id:'mass', name:'Adm. masiva', demand:massDemand, cap:massCap, backlog:backlogs.admisionMasiva, util:massDemand/Math.max(massCap,1)},
+    {id:'branch', name:'Sucursales', demand:branchDemand, cap:branchCap, backlog:backlogs.sucursales, util:branchDemand/Math.max(branchCap,1)},
+    {id:'label', name:'Etiquetado', demand:labelDemand, cap:labelCap, backlog:backlogs.etiquetado, util:labelDemand/Math.max(labelCap,1)},
+    {id:'ocr', name:'OCR manual', demand:ocrManualDemand, cap:ocrManualCap, backlog:backlogs.ocrManual, util:ocrManualDemand/Math.max(ocrManualCap,1)},
+    {id:'sort', name:'Clasificación', demand:total, cap:sortCap, backlog:backlogs.clasificacion, util:total/Math.max(sortCap,1)},
+    {id:'dist', name:'Distribución', demand:total, cap:deliveryCap, backlog:backlogs.distribucion, util:total/Math.max(deliveryCap,1)},
+    {id:'stock', name:'Bodega', demand:binsNeeded, cap:inp.binsCapacity, backlog:backlogs.bodega, util:binsNeeded/Math.max(inp.binsCapacity,1)}
+  ];
+  const bottleneck = [...stages].sort((a,b)=>b.util-a.util)[0];
+  return {total,massDemand,branchDemand,branchShareTraffic, massCap,labelDemand,labelCap,branchCap,cameraCap,ocrManualDemand,ocrManualCap,sortCap,oversizedDemand,carterDemand,carterCap,fleetCap,deliveryCap,centralStock,branchStock,binsNeeded,backlogs,backlogTotal,bottleneckRatio,manualDependency,branchOverload,backlogDays,leadHours,sla,delivered,deliveredDemand,secondAttemptVolume,returned,staff,laborCost,transportCost,retryCost,storageCost,lossCost,totalCost,processed,revenue,result,costPerEnv,digitalIndex,riskScore,stages,bottleneck};
+}
+
+function setVar(id,val){INPUTS[id]=Number(val); const s=document.getElementById('sl_'+id); if(s) s.value=val;}
+function renderModuleSwitch(){
+  document.getElementById('moduleSwitch').innerHTML = Object.entries(MODULES).map(([k,m])=>`<button class="mod-btn ${k===ACTIVE_MODULE?'active':''}" onclick="setModule('${k}')">${m.icon} ${m.name}</button>`).join('');
+}
+function setModule(k){ACTIVE_MODULE=k; renderAll();}
+function renderSliders(){
+  const m=MODULES[ACTIVE_MODULE]; document.getElementById('moduleBadge').textContent=m.icon+' '+m.name;
+  document.getElementById('sliders').innerHTML = m.vars.map(v=>{
+    const [id,label,def,min,max,step,unit,note]=v; const val=INPUTS[id];
+    return `<div class="slider-box"><div class="slider-head"><div><div class="slider-label">${label}</div><div class="slider-note">${note}</div></div><div class="slider-val" id="val_${id}">${formatVar(id,val,unit)}</div></div><input type="range" id="sl_${id}" min="${min}" max="${max}" step="${step}" value="${val}" oninput="INPUTS['${id}']=Number(this.value);document.getElementById('val_${id}').textContent=formatVar('${id}',this.value,'${unit}');updateSim();"><div class="range-minmax"><span>${min}</span><span>${max} ${unit}</span></div></div>`
+  }).join('');
+}
+function formatVar(id,val,unit){val=Number(val); if(unit==='%')return m(val, id==='lossRisk'?2:0)+'%'; if(unit==='min')return m(val,1)+' min'; if(unit==='env/día')return fmt(val)+' env/día'; if(unit==='env')return fmt(val)+' env'; if(unit==='bins')return fmt(val)+' bins'; return fmt(val)+' '+unit;}
+function renderScenarioSelect(){
+  const sel=document.getElementById('scenarioSelect'); sel.innerHTML=Object.entries(SCENARIOS).map(([k,s])=>`<option value="${k}">${s.name}</option>`).join('');
+}
+function applyScenario(k){ const sc=SCENARIOS[k]; if(!sc)return; INPUTS={...BASE,...sc.vals}; BASELINE=null; renderAll(); }
+function resetBase(){INPUTS={...BASE}; BASELINE=null; document.getElementById('scenarioSelect').value='base'; renderAll();}
+function freezeBaseline(){BASELINE={inputs:{...INPUTS},state:simulate(INPUTS)}; updateSim();}
+function clearBaseline(){BASELINE=null; updateSim();}
+function switchTab(id,btn){document.querySelectorAll('.content').forEach(x=>x.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.tab,.nav-btn').forEach(x=>x.classList.remove('active'));document.querySelectorAll(`.tab[onclick*="${id}"],.nav-btn[onclick*="${id}"]`).forEach(x=>x.classList.add('active')); if(btn)btn.classList.add('active')}
+
+function updateSim(){ STATE=simulate(INPUTS); saveState(); renderViews(); }
+function renderAll(){renderModuleSwitch();renderSliders();updateSim();}
+function renderViews(){renderKPIs();renderExecutive();renderProcessMap();renderCompare();renderCausal();renderCapacity();renderChains();renderPlan();renderEvidence();renderBoardroom();renderScenarioCards();}
+function kpiColor(v,good=true){ if(good){return v>=90?'green':v>=75?'yellow':'red'} return v<=15?'green':v<=35?'yellow':'red'}
+function renderKPIs(){ const s=STATE; const c = s.riskScore>70?'red':s.riskScore>40?'yellow':'green';
+  const kpis=[
+    ['Volumen diario',fmt(s.total),'envíos/día',''],['SLA estimado',pct(s.sla), 'meta '+ASSUMPTIONS.targetSLA+'%', kpiColor(s.sla)],['Backlog',fmt(s.backlogTotal),'envíos acumulables',kpiColor(s.backlogDays*100,false)],['Costo/envío',money(s.costPerEnv),'CLP por entrega','orange'],['Resultado/día',money(s.result/1000000)+'M','CLP millones',s.result>=0?'green':'red'],['Riesgo',pct(s.riskScore),'score operativo',c]
+  ];
+  document.getElementById('kpiStrip').innerHTML=kpis.map(k=>`<div class="kpi"><div class="kpi-label">${k[0]}</div><div class="kpi-val ${k[3]||''}">${k[1]}</div><div class="kpi-sub">${k[2]}</div></div>`).join('');
+}
+function riskClass(score){return score>70?'red':score>40?'yellow':'green'}
+function riskLabel(score){return score>70?'Alto':score>40?'Medio':'Controlado'}
+function renderExecutive(){ const s=STATE; const base=BASELINE?.state || simulate(BASE); const delta=s.result-base.result; const slaDelta=s.sla-base.sla;
+  document.getElementById('execSummary').innerHTML=`<div class="big-num ${s.result>=0?'pos':'neg'}">${money(s.result/1000000)}M</div><div class="small" style="margin:6px 0 12px">Resultado operacional diario estimado. Variación contra ${BASELINE?'baseline congelado':'base'}: <b class="${delta>=0?'pos':'neg'}">${money(delta/1000000)}M</b> y <b class="${slaDelta>=0?'pos':'neg'}">${m(slaDelta,1)} pp</b> de SLA.</div><div class="grid3"><div><span class="pill ${riskClass(s.riskScore)}">Riesgo ${riskLabel(s.riskScore)}</span></div><div><span class="pill orange">Cuello: ${s.bottleneck.name}</span></div><div><span class="pill green">Digital ${pct(s.digitalIndex)}</span></div></div>`;
+  document.getElementById('riskSummary').innerHTML=`<div class="summary-line"><span>Cuello de botella principal</span><b>${s.bottleneck.name}</b></div><div class="summary-line"><span>Utilización cuello</span><b>${pct(s.bottleneck.util*100)}</b></div><div class="summary-line"><span>Lead time estimado</span><b>${m(s.leadHours,1)} h</b></div><div class="summary-line"><span>Bins requeridos</span><b>${fmt(s.binsNeeded)} / ${fmt(INPUTS.binsCapacity)}</b></div><div class="summary-line"><span>Dependencia manual</span><b>${pct(s.manualDependency*100)}</b></div>`;
+  document.getElementById('execCards').innerHTML=[
+    ['Admisión',`La carga masiva usa ${pct(s.massDemand/Math.max(s.massCap,1)*100)} de su capacidad. La calidad de manifiesto está en ${pct(INPUTS.manifestQuality)}.`],
+    ['Clasificación',`OCR manual requiere procesar ${fmt(s.ocrManualDemand)} envíos/día con capacidad de ${fmt(s.ocrManualCap)}.`],
+    ['Distribución',`Demanda total ${fmt(s.total)}; capacidad combinada carteros/flota ${fmt(s.deliveryCap)}.`]
+  ].map(x=>`<div class="panel"><div class="panel-title">${x[0]}</div><div class="small">${x[1]}</div></div>`).join('');
+}
+function renderProcessMap(){ const s=STATE; const stages=[
+  ['Admisión masiva',s.massDemand,s.massCap,s.backlogs.admisionMasiva],['Sucursales',s.branchDemand,s.branchCap,s.backlogs.sucursales],['OCR / etiquetado',s.labelDemand+s.ocrManualDemand,s.labelCap+s.ocrManualCap,s.backlogs.etiquetado+s.backlogs.ocrManual],['Clasificación',s.total,s.sortCap,s.backlogs.clasificacion],['Distribución',s.total,s.deliveryCap,s.backlogs.distribucion]
+];
+  document.getElementById('processMap').innerHTML=stages.map(st=>{const util=st[1]/Math.max(st[2],1); const cls=util>1?'bad':util>.85?'warn':'ok';return `<div class="stage"><div class="stage-head">${st[0]}</div><div class="stage-metric"><span>Demanda</span><b>${fmt(st[1])}</b></div><div class="stage-metric"><span>Capacidad</span><b>${fmt(st[2])}</b></div><div class="stage-metric"><span>Backlog</span><b>${fmt(st[3])}</b></div><div class="bar"><span class="${cls}" style="width:${clamp(util*100,3,100)}%"></span></div><div class="small" style="margin-top:6px">Utilización: <b>${pct(util*100)}</b></div></div>`}).join('');
+}
+function renderCompare(){ const s=STATE, b=BASELINE?.state || simulate(BASE); const delta={sla:s.sla-b.sla,back:s.backlogTotal-b.backlogTotal,cost:s.costPerEnv-b.costPerEnv,result:s.result-b.result,lead:s.leadHours-b.leadHours};
+  document.getElementById('comparePanel').innerHTML=`<table><thead><tr><th>Métrica</th><th>Actual</th><th>Comparación</th></tr></thead><tbody><tr><td>SLA</td><td>${pct(s.sla)}</td><td class="${delta.sla>=0?'pos':'neg'}">${m(delta.sla,1)} pp</td></tr><tr><td>Backlog</td><td>${fmt(s.backlogTotal)}</td><td class="${delta.back<=0?'pos':'neg'}">${fmt(delta.back)}</td></tr><tr><td>Costo/envío</td><td>${money(s.costPerEnv)}</td><td class="${delta.cost<=0?'pos':'neg'}">${money(delta.cost)}</td></tr><tr><td>Resultado/día</td><td>${money(s.result/1000000)}M</td><td class="${delta.result>=0?'pos':'neg'}">${money(delta.result/1000000)}M</td></tr><tr><td>Lead time</td><td>${m(s.leadHours,1)} h</td><td class="${delta.lead<=0?'pos':'neg'}">${m(delta.lead,1)} h</td></tr></tbody></table>`;
+  const impacts=sensitivities().slice(0,6); const max=Math.max(...impacts.map(i=>Math.abs(i.deltaResult)),1); document.getElementById('waterfall').innerHTML=impacts.map(i=>`<div class="wf-bar"><div class="wf-val">${i.deltaResult>=0?'+':''}${m(i.deltaResult/1000000,1)}M</div><div class="wf-col ${i.deltaResult<0?'neg':''}" style="height:${clamp(Math.abs(i.deltaResult)/max*120,8,120)}px"></div><div class="wf-label">${i.label}</div></div>`).join('');
+  document.getElementById('baselineNote').textContent=BASELINE?'Baseline congelado contra la configuración actual.':'Sin baseline congelado: comparación contra el escenario Base.';
+}
+function renderScenarioCards(){document.getElementById('scenarioCards').innerHTML=Object.entries(SCENARIOS).map(([k,s])=>`<div class="scenario-card ${document.getElementById('scenarioSelect').value===k?'active':''}" onclick="document.getElementById('scenarioSelect').value='${k}';applyScenario('${k}')"><h4>${s.name}</h4><p>${s.desc}</p></div>`).join('')}
+function renderCapacity(){ const rows=STATE.stages.map(st=>`<tr><td>${st.name}</td><td>${fmt(st.demand)}</td><td>${fmt(st.cap)}</td><td class="${st.util>1?'neg':st.util>.85?'neu':'pos'}">${pct(st.util*100)}</td><td>${fmt(st.backlog)}</td></tr>`).join(''); document.getElementById('capacityBody').innerHTML=rows;
+  const req=[['Adm. masiva',Math.ceil(STATE.massDemand/(3500*(1+INPUTS.preclassified/100*.25+INPUTS.manifestQuality/100*.12))),INPUTS.massOps],['Etiquetado',Math.ceil(STATE.labelDemand/5000),INPUTS.labelOps],['OCR manual',Math.ceil(STATE.ocrManualDemand/(120*ASSUMPTIONS.workHours)),INPUTS.ocrManualOps],['Clasificación',Math.ceil(STATE.total/(10000*(1+INPUTS.preclassified/100*.32+INPUTS.sortQuality/100*.16))),INPUTS.classOps],['Carteros',Math.ceil(STATE.carterDemand/INPUTS.carterProd),INPUTS.carters]];
+  document.getElementById('staffPanel').innerHTML=req.map(r=>`<div class="summary-line"><span>${r[0]}</span><b class="${r[2]>=r[1]?'pos':'neg'}">${fmt(r[2])} / req. ${fmt(r[1])}</b></div>`).join('')+`<div class="footer-note">La dotación requerida es referencial y se calcula a partir de productividades estándar del simulador.</div>`;
+}
+function renderCausal(){ const s=STATE; const nodes=[
+  ['vol','Volumen',fmt(INPUTS.dailyVolume),90,64,varColor(s.total/55000),'Carga de entrada que presiona admisión, clasificación, distribución y stock.'],
+  ['adm','Admisión',pct(INPUTS.preclassified),265,64,varColor(INPUTS.preclassified/100,true),'La preclasificación y la calidad de manifiesto reducen manipulación y reprocesos.'],
+  ['ocr','OCR/manual',pct(INPUTS.ocrAuto),440,64,varColor(INPUTS.ocrAuto/100,true),'El OCR automático reduce digitación manual y errores de encaminamiento.'],
+  ['sort','Clasificación',pct(INPUTS.sortQuality),615,64,varColor(INPUTS.sortQuality/100,true),'La calidad de clasificación determina exactitud de rutas, sucursales y flota.'],
+  ['dist','Distribución',pct(INPUTS.deliveryRate),790,64,varColor(INPUTS.deliveryRate/100,true),'La capacidad de carteros y flota define el SLA visible por el cliente.'],
+  ['stock','Stock',fmt(s.binsNeeded)+' bins',265,250,varColor(s.binsNeeded/INPUTS.binsCapacity,false),'La retención, no pago y carga derivada elevan necesidad de bodega y riesgo operacional.'],
+  ['cost','Costo/envío',money(s.costPerEnv),520,250,varColor(s.costPerEnv/2500,false),'El costo unitario aumenta por mano de obra, reproceso, almacenamiento y segundo intento.'],
+  ['sla','SLA',pct(s.sla),790,250,varColor(s.sla/100,true),'Resultado operativo de extremo a extremo.'],
+  ['risk','Riesgo',pct(s.riskScore),520,378,varColor(s.riskScore/100,false),'Síntesis de backlog, sobreutilización, stock y dependencia manual.']
+];
+ const links=[['vol','adm'],['adm','ocr'],['ocr','sort'],['sort','dist'],['stock','cost'],['cost','sla'],['dist','sla'],['sla','risk'],['vol','stock'],['sort','cost']];
+ const pos=Object.fromEntries(nodes.map(n=>[n[0],{x:n[3],y:n[4]}]));
+ let svg='<defs><marker id="arr" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#ff6b2b"/></marker></defs>';
+ links.forEach(l=>{const a=pos[l[0]],b=pos[l[1]];svg+=`<path class="link" d="M${a.x+70},${a.y+28} C${(a.x+b.x)/2},${a.y+28} ${(a.x+b.x)/2},${b.y+28} ${b.x-70},${b.y+28}" stroke="#ff6b2b" marker-end="url(#arr)"/>`});
+ nodes.forEach(n=>{svg+=`<g class="node" onclick="showNode('${n[0]}')"><rect x="${n[3]-70}" y="${n[4]}" width="140" height="58" rx="9" stroke="${n[5]}"/><text x="${n[3]}" y="${n[4]+22}" text-anchor="middle" font-size="12" font-weight="800" fill="${n[5]}">${n[1]}</text><text x="${n[3]}" y="${n[4]+43}" text-anchor="middle" font-size="13" font-weight="900" fill="#fff">${n[2]}</text></g>`});
+ document.getElementById('causalSvg').innerHTML=svg; window._nodeTexts=Object.fromEntries(nodes.map(n=>[n[0],[n[1],n[6]]]))}
+function varColor(v,highGood=false){ if(highGood){return v>.85?'#2ec27e':v>.65?'#f4b740':'#e85d75'} return v>.85?'#e85d75':v>.55?'#f4b740':'#2ec27e'}
+function showNode(id){ const p=document.getElementById('nodePanel'); const t=window._nodeTexts[id]||['Nodo','']; document.getElementById('nodeTitle').textContent=t[0]; document.getElementById('nodeText').textContent=t[1]; p.classList.add('visible');}
+function renderChains(){ const s=STATE; const chains=[
+  ['Carga masiva → clasificación → distribución',`Si el volumen diario sube a ${fmt(s.total)} y la preclasificación queda en ${pct(INPUTS.preclassified)}, la clasificación opera al ${pct(s.stages[4].util*100)} y traspasa backlog a distribución.`],
+  ['Pago/aviso digital → sucursales → stock',`Con ${pct(INPUTS.webPayment)} de pago digital, las sucursales absorben ${fmt(s.branchDemand)} envíos/día y el stock estimado llega a ${fmt(s.branchStock)} envíos.`],
+  ['OCR manual → costo → SLA',`El OCR manual demanda ${fmt(s.ocrManualDemand)} envíos/día. Cuando supera capacidad, aumenta lead time, reproceso y costo por envío.`],
+  ['Bodega → vencimiento → retorno',`La retención de ${INPUTS.holdDays} días y ${pct(INPUTS.unpaidRate)} no pagado/no retirado exige ${fmt(s.binsNeeded)} bins centrales.`]
+ ];
+ document.getElementById('chainPanel').innerHTML=chains.map(c=>`<div class="action-card"><div class="rank">•</div><div><div class="action-title">${c[0]}</div><div class="action-desc">${c[1]}</div></div><div class="action-val">${riskLabel(s.riskScore)}</div></div>`).join('');
+ const risks=getRisks(); document.getElementById('riskGrid').innerHTML=risks.map(r=>`<div class="risk-card ${r.cls}"><h4>${r.title}</h4><p>${r.text}</p></div>`).join('');
+}
+function getRisks(){ const s=STATE; return [
+  {cls:s.bottleneck.util>1?'red':s.bottleneck.util>.85?'':'green',title:'Cuello de botella',text:`${s.bottleneck.name} opera al ${pct(s.bottleneck.util*100)}. Backlog asociado: ${fmt(s.bottleneck.backlog)}.`},
+  {cls:s.binsNeeded>INPUTS.binsCapacity?'red':s.binsNeeded>INPUTS.binsCapacity*.85?'':'green',title:'Capacidad de stock',text:`Se requieren ${fmt(s.binsNeeded)} bins sobre capacidad de ${fmt(INPUTS.binsCapacity)}.`},
+  {cls:s.sla<ASSUMPTIONS.targetSLA?'red':s.sla<95?'':'green',title:'SLA comprometido',text:`SLA estimado ${pct(s.sla)} vs meta referencial ${pct(ASSUMPTIONS.targetSLA)}.`}
+];}
+function sensitivities(){ const tests=[
+  {id:'preclassified',label:'Preclasif.',change:10,cost:800000,desc:'+10 pp preclasificación en origen'},
+  {id:'manifestQuality',label:'Manifiesto',change:10,cost:600000,desc:'+10 pp calidad de datos'},
+  {id:'webPayment',label:'Pago digital',change:10,cost:500000,desc:'+10 pp pago/aviso digital'},
+  {id:'ocrAuto',label:'OCR auto',change:5,cost:1200000,desc:'+5 pp lectura automática'},
+  {id:'classOps',label:'Clasif.',change:2,cost:120000,desc:'+2 operadores clasificación'},
+  {id:'carters',label:'Carteros',change:20,cost:900000,desc:'+20 carteros/rutas equivalentes'},
+  {id:'fleetCap',label:'Flota CEP',change:1000,cost:700000,desc:'+1.000 env/día capacidad flota'},
+  {id:'binsCapacity',label:'Bodega',change:200,cost:400000,desc:'+200 bins capacidad stock'},
+  {id:'deliveryRate',label:'Entrega',change:3,cost:550000,desc:'+3 pp entrega efectiva'},
+  {id:'serviceMin',label:'Atención suc.',change:-0.5,cost:300000,desc:'-0,5 min atención sucursal'}
+ ]; const cur=simulate(INPUTS); return tests.map(t=>{const ni={...INPUTS}; ni[t.id]=clamp((ni[t.id]||0)+t.change, getMin(t.id), getMax(t.id)); const ns=simulate(ni); const value = (ns.result-cur.result) + (ns.sla-cur.sla)*150000 + (cur.backlogTotal-ns.backlogTotal)*120; return {...t,deltaResult:ns.result-cur.result,deltaSLA:ns.sla-cur.sla,deltaBack:cur.backlogTotal-ns.backlogTotal,value,roi:value/Math.max(t.cost,1),after:ns};}).sort((a,b)=>b.roi-a.roi);}
+function getMin(id){for(const m of Object.values(MODULES)){for(const v of m.vars){if(v[0]===id)return v[3]}}return -Infinity}function getMax(id){for(const m of Object.values(MODULES)){for(const v of m.vars){if(v[0]===id)return v[4]}}return Infinity}
+function renderPlan(){ const acts=sensitivities(); const top=acts.slice(0,3); const combined=applyActions(INPUTS,top); document.getElementById('combinedBox').innerHTML=`<div class="panel" style="background:rgba(18,196,163,.06);border-color:rgba(18,196,163,.28);margin-bottom:10px"><div class="panel-title">Escenario combinado Top 3</div><div class="small">Aplicar <b>${top.map(x=>x.label).join(' + ')}</b> generaría Δ resultado aproximado de <b class="${combined.deltaResult>=0?'pos':'neg'}">${money(combined.deltaResult/1000000)}M/día</b>, Δ SLA de <b class="${combined.deltaSLA>=0?'pos':'neg'}">${m(combined.deltaSLA,1)} pp</b> y reducción de backlog de <b class="pos">${fmt(combined.deltaBack)}</b> envíos.</div></div>`;
+ document.getElementById('actionPlan').innerHTML=acts.map((a,i)=>`<div class="action-card"><div class="rank">${i+1}</div><div><div class="action-title">${a.desc}</div><div class="action-desc">Impacto: Δ SLA ${m(a.deltaSLA,1)} pp · Δ backlog ${fmt(a.deltaBack)} · costo acción ${money(a.cost)}.</div></div><div class="action-val">ROI ${m(a.roi,1)}x<br><span class="${a.deltaResult>=0?'pos':'neg'}">${money(a.deltaResult/1000000)}M</span></div></div>`).join('');}
+function applyActions(inp,acts){let ni={...inp}; acts.forEach(a=>{ni[a.id]=clamp((ni[a.id]||0)+a.change,getMin(a.id),getMax(a.id))}); const cur=simulate(inp), ns=simulate(ni); return {state:ns, deltaResult:ns.result-cur.result, deltaSLA:ns.sla-cur.sla, deltaBack:cur.backlogTotal-ns.backlogTotal};}
+function renderEvidence(){ const rows=[
+  ['Volumen diario','Demanda principal sobre admisión, clasificación y distribución',fmt(BASE.dailyVolume),'Base demo editable.'],['OCR manual','Determina dotación de corrección/digitación',fmt(BASE.ocrManualOps)+' operadores','Productividad usada: 120 env/persona-hora.'],['Etiquetado tracking','Calcula carga sin seguimiento de origen',fmt(BASE.withTracking)+'% con tracking','Productividad usada: 5.000 env/persona-día.'],['Bodega','Convierte stock retenido a bins requeridos',fmt(BASE.binsCapacity)+' bins','1 bin ≈ '+ASSUMPTIONS.envPerBin+' envíos.'],['Sucursales','Evalúa sobrecarga por pago/retiro presencial',fmt(BASE.branches)+' sucursales','Carga presencial aumenta stock y tiempo de atención.'],['Distribución','Capacidad carteros + flota CEP',fmt(BASE.carters)+' carteros','Productividad configurable por módulo.']
+]; document.getElementById('traceBody').innerHTML=rows.map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td><td>${r[3]}</td></tr>`).join('');
+ document.getElementById('assumptions').innerHTML=`<div class="summary-line"><span>Jornada operativa</span><b>${ASSUMPTIONS.workHours} h</b></div><div class="summary-line"><span>Productividad etiquetado</span><b>5.000 env/persona-día</b></div><div class="summary-line"><span>Productividad OCR manual</span><b>120 env/persona-hora</b></div><div class="summary-line"><span>Capacidad OCR cámara</span><b>20 env/min</b></div><div class="summary-line"><span>Envíos por saca</span><b>${ASSUMPTIONS.envPerSaca}</b></div><div class="summary-line"><span>Envíos por bin</span><b>${ASSUMPTIONS.envPerBin}</b></div><div class="footer-note">Datos demo. Para diagnóstico real, calibrar con volúmenes, tiempos, dotación, costos y SLA históricos.</div>`;}
+function renderBoardroom(){ const s=STATE; document.getElementById('brHeadline').innerHTML=`<div class="big-num ${s.result>=0?'pos':'neg'}">${money(s.result/1000000)}M/día</div><div class="small" style="margin-top:8px">SLA estimado <b>${pct(s.sla)}</b>, costo unitario <b>${money(s.costPerEnv)}</b>, backlog <b>${fmt(s.backlogTotal)}</b> envíos. El cuello operativo principal es <b>${s.bottleneck.name}</b>.</div>`;
+ document.getElementById('brRisk').innerHTML=`<div class="big-num ${riskClass(s.riskScore)}">${pct(s.riskScore)}</div><div class="small">Riesgo ${riskLabel(s.riskScore)}. Lead time ${m(s.leadHours,1)} h. Bins requeridos ${fmt(s.binsNeeded)}.</div>`;
+ const acts=sensitivities().slice(0,3); document.getElementById('brLevers').innerHTML=acts.map((a,i)=>`<div class="summary-line"><span>${i+1}. ${a.desc}</span><b>${m(a.roi,1)}x</b></div>`).join('');
+ document.getElementById('scenarioBody').innerHTML=Object.entries(SCENARIOS).map(([k,sc])=>{const st=simulate({...BASE,...sc.vals});return `<tr><td>${sc.name}</td><td>${pct(st.sla)}</td><td>${fmt(st.backlogTotal)}</td><td>${money(st.costPerEnv)}</td><td class="${st.result>=0?'pos':'neg'}">${money(st.result/1000000)}M</td></tr>`}).join('');
+ const rec = acts[0]; document.getElementById('brRecommendation').innerHTML=`<p class="small">Priorizar <b>${rec.desc}</b> porque combina impacto económico, reducción de fricción operativa y factibilidad de implementación. La segunda línea debe abordar el cuello <b>${s.bottleneck.name}</b> y la tercera debe reducir stock retenido mediante pago/aviso digital y mejor trazabilidad de admisión.</p>`;}
+function getCurrentPlanRows(){return sensitivities().map((a,i)=>[i+1,a.desc,Math.round(a.deltaResult),a.deltaSLA.toFixed(2),Math.round(a.deltaBack),Math.round(a.cost),a.roi.toFixed(2)].join(';')).join('\n')}
+function exportPlanCSV(){ const csv='rank;accion;delta_resultado_clp;delta_sla_pp;delta_backlog_envios;costo_accion_clp;roi\n'+getCurrentPlanRows(); const blob=new Blob([csv],{type:'text/csv;charset=utf-8'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='PostalEye_V31_plan_accion.csv'; a.click(); URL.revokeObjectURL(a.href);}
+function handleCSV(ev){ const file=ev.target.files[0]; if(!file)return; const reader=new FileReader(); reader.onload=e=>{try{const txt=e.target.result.trim(); const lines=txt.split(/\r?\n/); const headers=lines[0].split(',').map(x=>x.trim()); const vals=lines[1].split(',').map(x=>x.trim()); headers.forEach((h,i)=>{if(h in INPUTS && vals[i]!=='' && !isNaN(Number(vals[i]))) INPUTS[h]=Number(vals[i]);}); document.getElementById('csvStatus').textContent='CSV cargado: se actualizaron variables reconocidas de la primera fila.'; renderAll();}catch(err){document.getElementById('csvStatus').textContent='No se pudo leer el CSV: '+err.message;}}; reader.readAsText(file);}
+function saveState(){try{localStorage.setItem('postaleye_v31',JSON.stringify(INPUTS));}catch(e){}}
+function restoreState(){try{const raw=localStorage.getItem('postaleye_v31'); if(raw){INPUTS={...BASE,...JSON.parse(raw)};}}catch(e){}}
+function initClock(){setInterval(()=>{document.getElementById('clock').textContent=new Date().toLocaleTimeString('es-CL',{hour:'2-digit',minute:'2-digit',second:'2-digit'});},1000)}
+function boot(){restoreState();renderScenarioSelect();document.getElementById('scenarioSelect').value='base';initClock();renderAll();}
+boot();
+</script>
+</body>
+</html>

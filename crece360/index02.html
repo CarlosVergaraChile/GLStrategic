@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Crece360 | Autoevaluación de preparación Ley de Datos Personales</title>
+<style>
+:root{
+  --navy:#061829;--navy2:#0B2A45;--deep:#0D1B2A;--teal:#00A99D;--teal2:#16D6C8;
+  --cyan:#42D3E6;--red:#B20D30;--red2:#E31F49;--amber:#F5B84B;--green:#14A66A;
+  --bg:#F4F7FB;--card:#FFFFFF;--ink:#101828;--muted:#667085;--line:#D8E1EA;
+  --shadow:0 22px 70px rgba(6,24,41,.15);--radius:22px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:Aptos,Inter,Calibri,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.45}
+button,input,select,textarea{font-family:inherit}
+button{cursor:pointer}
+.wrap{max-width:1180px;margin:0 auto;padding:0 22px}
+.topbar{position:sticky;top:0;z-index:50;background:rgba(6,24,41,.94);backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,.09)}
+.topbar-inner{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:14px 0}
+.brand{display:flex;align-items:center;gap:12px;color:white}.brand-mark{width:42px;height:42px;border-radius:14px;background:linear-gradient(135deg,var(--teal),#087A73);display:grid;place-items:center;font-weight:950;box-shadow:0 12px 35px rgba(0,169,157,.32)}
+.brand strong{display:block;font-size:18px;letter-spacing:-.035em}.brand span{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#9BB4CA;font-weight:800;margin-top:2px}
+.partner-strip{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}.partner{border:1px solid rgba(255,255,255,.13);background:rgba(255,255,255,.07);border-radius:999px;padding:7px 11px;color:#D8E8F8;font-size:12px;font-weight:900}.partner.eq{background:rgba(178,13,48,.28);color:white}.partner.gl{color:#B8EAF0}
+.hero{background:radial-gradient(circle at 10% 0%,rgba(0,169,157,.30),transparent 30%),radial-gradient(circle at 90% 10%,rgba(178,13,48,.22),transparent 34%),linear-gradient(135deg,#061829 0%,#0B2A45 54%,#061829 100%);color:white;padding:54px 0 66px;position:relative;overflow:hidden}
+.hero:after{content:"";position:absolute;right:-160px;bottom:-150px;width:420px;height:420px;border-radius:50%;background:rgba(0,169,157,.10);border:1px solid rgba(255,255,255,.08)}
+.hero-grid{display:grid;grid-template-columns:1.07fr .93fr;gap:34px;align-items:center;position:relative;z-index:1}
+.kicker{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(0,169,157,.45);background:rgba(0,169,157,.17);color:#ABFFF8;border-radius:999px;padding:8px 13px;font-size:12px;font-weight:950;text-transform:uppercase;letter-spacing:.07em;margin-bottom:18px}
+h1{font-size:54px;line-height:1.02;letter-spacing:-.06em;margin-bottom:18px}h1 span{color:var(--teal2)}
+.hero p{font-size:18px;line-height:1.58;color:#D6E7F7;max-width:720px;margin-bottom:18px}.hero .subnote{font-size:13px;color:#AFC5DB;max-width:720px;margin-top:10px}.hero .subnote b{color:white}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}.btn{border:0;border-radius:13px;padding:13px 18px;font-size:14px;font-weight:950;display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;transition:.16s}.btn:hover{transform:translateY(-1px)}.btn-primary{background:linear-gradient(135deg,var(--red),var(--red2));color:white;box-shadow:0 14px 34px rgba(178,13,48,.34)}.btn-teal{background:linear-gradient(135deg,var(--teal),#087A73);color:white}.btn-light{background:white;color:var(--navy)}.btn-ghost{background:rgba(255,255,255,.08);color:white;border:1px solid rgba(255,255,255,.20)}.btn-muted{background:#EDF2F7;color:#344054}.btn-small{padding:9px 12px;border-radius:11px;font-size:12px}
+.hero-card{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);backdrop-filter:blur(14px);border-radius:26px;padding:22px;box-shadow:var(--shadow)}
+.hero-card h3{font-size:20px;margin-bottom:12px}.law{display:flex;gap:12px;align-items:flex-start;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:15px;padding:13px;margin-bottom:10px}.dot{width:10px;height:10px;border-radius:50%;background:var(--teal2);margin-top:5px;flex-shrink:0}.law b{display:block;color:white;font-size:14px}.law span{display:block;color:#BBD0E4;font-size:12px;margin-top:2px}.risk-box{border:1px solid rgba(227,31,73,.45);background:rgba(178,13,48,.18);border-radius:16px;padding:14px;margin-top:12px}.risk-box b{color:#FFCFD8}.risk-box span{display:block;color:#F7D9DF;font-size:13px;margin-top:3px}.price-pill{margin-top:12px;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.18);border-radius:18px;padding:16px;display:flex;align-items:center;justify-content:space-between;gap:16px}.price-pill strong{font-size:28px;color:var(--teal2);letter-spacing:-.04em}.price-pill span{font-size:12px;color:#C6D7E8}
+.section{padding:54px 0}.section h2{font-size:36px;letter-spacing:-.04em;line-height:1.1;color:var(--navy);margin-bottom:14px}.section .lead{font-size:17px;color:#475467;max-width:850px;margin-bottom:22px}.grid{display:grid;gap:16px}.cols2{grid-template-columns:repeat(2,minmax(0,1fr))}.cols3{grid-template-columns:repeat(3,minmax(0,1fr))}.cols4{grid-template-columns:repeat(4,minmax(0,1fr))}.card{background:white;border:1px solid var(--line);border-radius:var(--radius);padding:20px;box-shadow:0 10px 34px rgba(16,24,40,.05)}.card h3{font-size:18px;color:var(--navy);margin-bottom:8px}.card p,.card li{font-size:14px;color:#475467;line-height:1.52}.card ul{padding-left:18px;margin-top:9px}.badge{display:inline-flex;border-radius:999px;padding:6px 10px;background:#E9F8F6;color:#087A73;font-size:11px;font-weight:950;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px}.badge.red{background:#FFF0F2;color:#B20D30}.badge.gold{background:#FFF6DF;color:#8A5A00}.badge.dark{background:#0B2A45;color:white}
+.funnel{background:white;border:1px solid var(--line);border-radius:26px;box-shadow:var(--shadow);overflow:hidden}.funnel-head{padding:22px 24px;background:linear-gradient(135deg,#0B2A45,#0F475C);color:white}.funnel-head h2{color:white;font-size:31px;margin-bottom:8px}.funnel-head p{color:#D3E6F2}.diag{display:grid;grid-template-columns:.85fr 1.15fr;min-height:620px}.diag-left{background:#F7FAFC;border-right:1px solid var(--line);padding:24px}.diag-right{padding:24px}.progress{height:9px;border-radius:999px;background:#E4EAF1;overflow:hidden;margin:14px 0 20px}.progress span{display:block;height:100%;width:0%;border-radius:999px;background:linear-gradient(90deg,var(--red),var(--teal));transition:.25s}.step-list{display:grid;gap:9px}.step{border:1px solid var(--line);background:white;border-radius:15px;padding:13px}.step.active{border-color:var(--teal);box-shadow:0 8px 18px rgba(0,169,157,.10)}.step b{display:block;font-size:13px;color:var(--navy)}.step span{display:block;font-size:12px;color:var(--muted);margin-top:2px}.form-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.field label{display:block;font-size:12px;font-weight:950;color:#344054;text-transform:uppercase;letter-spacing:.04em;margin-bottom:6px}.field input,.field select,.field textarea{width:100%;border:1.5px solid var(--line);border-radius:12px;padding:12px 13px;font-size:14px;outline:none;background:white}.field textarea{min-height:84px;resize:vertical}.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(0,169,157,.12)}.field.full{grid-column:1/-1}.consent{margin-top:12px;background:#FFF8E8;border:1px solid rgba(245,184,75,.38);border-radius:14px;padding:12px;font-size:13px;color:#5F4200}.consent label{display:flex;gap:9px;align-items:flex-start;font-weight:700}.consent input{margin-top:3px}.screen{display:none}.screen.active{display:block;animation:fade .18s ease}@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}.qtitle{font-size:27px;line-height:1.15;letter-spacing:-.03em;color:var(--navy);margin-bottom:7px}.qhelp{font-size:14px;color:var(--muted);margin-bottom:16px}.options{display:grid;gap:10px}.opt{border:1.5px solid var(--line);border-radius:15px;background:white;padding:14px;text-align:left;display:flex;gap:12px;align-items:flex-start;transition:.12s}.opt:hover{border-color:#9DB4CE;transform:translateY(-1px)}.opt.selected{border-color:var(--teal);background:#F0FFFC}.radio{width:20px;height:20px;border-radius:50%;border:2px solid #9DB0C4;flex-shrink:0;margin-top:2px}.opt.selected .radio{border-color:var(--teal);box-shadow:inset 0 0 0 4px #F0FFFC;background:var(--teal)}.opt strong{display:block;font-size:14px;margin-bottom:4px}.opt span{font-size:13px;color:var(--muted)}.diag-nav{display:flex;justify-content:space-between;align-items:center;gap:12px;border-top:1px solid var(--line);padding-top:16px;margin-top:20px}.error{display:none;color:var(--red);font-size:13px;font-weight:950;margin-top:8px}.result-panel{display:grid;grid-template-columns:.8fr 1.2fr;gap:18px}.score-card{text-align:center;background:#F8FAFC;border:1px solid var(--line);border-radius:22px;padding:20px}.ring{width:180px;height:180px;margin:0 auto 14px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--teal) 0deg,var(--teal) 220deg,#E6ECF2 220deg 360deg);position:relative}.ring:after{content:"";position:absolute;inset:17px;background:white;border-radius:50%}.ring-inner{position:relative;z-index:1}.ring-inner strong{display:block;font-size:50px;letter-spacing:-.06em;color:var(--navy)}.ring-inner span{font-size:11px;color:var(--muted);font-weight:950;text-transform:uppercase}.level{display:inline-flex;margin-top:4px;border-radius:999px;padding:7px 12px;background:#E9F8F6;color:#087A73;font-weight:950;font-size:12px}.result-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}.priority-list{display:grid;gap:10px}.priority{border:1px solid var(--line);border-radius:14px;background:white;padding:12px}.priority b{display:block;color:var(--navy);font-size:14px}.priority span{display:block;color:var(--muted);font-size:13px;margin-top:2px}.road{position:relative}.road:before{content:"";position:absolute;top:42px;left:8%;right:8%;height:3px;background:#D8E1EA}.road-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;position:relative}.road-card{background:white;border:1px solid var(--line);border-top:5px solid var(--teal);border-radius:20px;padding:18px;box-shadow:0 10px 34px rgba(16,24,40,.05);position:relative}.road-card .num{width:34px;height:34px;border-radius:50%;background:var(--navy);color:white;display:grid;place-items:center;font-weight:950;margin-bottom:10px}.road-card h3{font-size:17px;color:var(--navy);margin-bottom:7px}.road-card p{font-size:13px;color:#475467}.plans{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.plan{background:white;border:1px solid var(--line);border-radius:24px;padding:20px;box-shadow:0 10px 34px rgba(16,24,40,.05)}.plan.featured{border:2px solid var(--teal);box-shadow:0 18px 54px rgba(0,169,157,.14)}.plan h3{font-size:20px;color:var(--navy);margin-bottom:6px}.price{font-size:30px;font-weight:950;color:var(--teal);letter-spacing:-.04em;margin:8px 0}.plan ul{padding-left:18px;margin-top:10px}.plan li{font-size:13.5px;color:#475467;margin:6px 0}.source{font-size:12px;color:#667085;margin-top:18px}.footer{background:var(--navy);color:#AFC5DB;padding:28px 0;margin-top:36px}.footer b{color:white}.footer p{font-size:12px;line-height:1.55}.hidden{display:none!important}.toast{position:fixed;right:18px;bottom:18px;background:#0B2A45;color:white;padding:12px 14px;border-radius:12px;box-shadow:var(--shadow);z-index:100;display:none;font-size:13px;font-weight:800}
+@media(max-width:920px){.hero-grid,.diag,.cols2,.cols3,.cols4,.result-panel,.road-grid,.plans{grid-template-columns:1fr}.topbar-inner{align-items:flex-start;flex-direction:column}.partner-strip{justify-content:flex-start}.hero{padding:38px 0}h1{font-size:37px}.section h2{font-size:29px}.form-grid{grid-template-columns:1fr}.field.full{grid-column:auto}.price-pill{align-items:flex-start;flex-direction:column}.road:before{display:none}.diag-left{border-right:0;border-bottom:1px solid var(--line)}}
+@media print{.topbar,.hero,.diag-nav,.actions,.result-actions,.footer,.toast{display:none!important}.screen{display:block}.funnel{box-shadow:none}.section{padding:20px 0}.card,.plan,.road-card{box-shadow:none}}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="wrap topbar-inner">
+    <div class="brand"><div class="brand-mark">360</div><div><strong>Crece360</strong><span>Empresa Protegida · Cumplimiento + gestión + IA</span></div></div>
+    <div class="partner-strip"><span class="partner">infobusiness</span><span class="partner eq">EQUIFAX</span><span class="partner gl">GL Strategic</span><span class="partner">OTEC + aliados</span></div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="kicker">Nuevo estándar de cumplimiento · Chile 2026</div>
+      <h1>Prepare su empresa para la nueva Ley de Datos Personales y convierta el cumplimiento en una <span>ventaja de gestión</span>.</h1>
+      <p>Crece360 le ayuda a ordenar datos, documentos, riesgos y procesos en un plan concreto, proporcional al tamaño y exposición de su empresa.</p>
+      <p class="subnote"><b>Comience gratis:</b> responda una autoevaluación de 3 minutos y reciba un resultado inicial con brechas, nivel de preparación y siguiente paso recomendado.</p>
+      <div class="actions">
+        <a class="btn btn-primary" href="#autodiagnostico">Realizar autoevaluación gratuita</a>
+        <a class="btn btn-ghost" href="#solucion">Ver solución 360</a>
+      </div>
+    </div>
+    <aside class="hero-card">
+      <h3>¿Por qué actuar ahora?</h3>
+      <div class="law"><span class="dot"></span><div><b>Ley 21.719</b><span>Nuevo marco de protección y tratamiento de datos personales. Vigencia: 1 de diciembre de 2026.</span></div></div>
+      <div class="law"><span class="dot" style="background:#F5B84B"></span><div><b>Exigencia de evidencia</b><span>No basta declarar buenas prácticas: se requieren procesos, documentación, registros y control efectivo.</span></div></div>
+      <div class="law"><span class="dot" style="background:#E31F49"></span><div><b>Clientes y mandantes</b><span>Empresas grandes, bancos y licitaciones exigirán más respaldo a sus proveedores.</span></div></div>
+      <div class="risk-box"><b>Sanciones de hasta 20.000 UTM en infracciones gravísimas.</b><span>La preparación no es solo legal: afecta continuidad, reputación, relación con clientes y acceso a negocios.</span></div>
+      <div class="price-pill"><span>Planes flexibles según tamaño y exposición</span><strong>Desde UF 3 + IVA</strong></div>
+    </aside>
+  </div>
+</section>
+
+<section class="section" id="solucion">
+  <div class="wrap">
+    <h2>Una respuesta práctica para el nuevo compliance empresarial</h2>
+    <p class="lead">Crece360 no se limita a protección de datos. Usa esa obligación como punto de entrada para construir una ruta de protección, madurez y crecimiento: cumplimiento, evidencia, capacitación, datos, IA, estrategia y gestión.</p>
+    <div class="grid cols3">
+      <div class="card"><span class="badge">Diagnóstico</span><h3>Sepa dónde está expuesta</h3><p>Identifique brechas críticas en datos personales, documentación, responsables, seguridad, capacitación y relación con clientes grandes.</p></div>
+      <div class="card"><span class="badge red">Plan</span><h3>Priorice acciones concretas</h3><p>Reciba un plan proporcional al tamaño, riesgo y operación de su empresa, evitando sobrecostos y documentos que nadie usa.</p></div>
+      <div class="card"><span class="badge gold">Evidencia</span><h3>Demuestre avance</h3><p>Ordene políticas, protocolos, registros, capacitaciones y controles para responder mejor ante auditorías, contratos o fiscalización.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="autodiagnostico">
+  <div class="wrap">
+    <div class="funnel">
+      <div class="funnel-head">
+        <h2>Autoevaluación gratuita Crece360</h2>
+        <p>8 preguntas. Resultado inmediato. Captura de datos mínima para enviar seguimiento y propuesta adecuada.</p>
+      </div>
+      <div class="diag">
+        <aside class="diag-left">
+          <h3>Ruta del diagnóstico</h3>
+          <div class="progress"><span id="progressBar"></span></div>
+          <div class="step-list">
+            <div class="step active" id="stepLead"><b>1. Datos de contacto</b><span>Email obligatorio para recibir seguimiento.</span></div>
+            <div class="step" id="stepQuiz"><b>2. Autoevaluación</b><span>Preguntas en lenguaje gerencial.</span></div>
+            <div class="step" id="stepResult"><b>3. Resultado</b><span>Score, brechas y siguiente paso.</span></div>
+          </div>
+          <p class="source">Uso interno: para captura real, conectar el formulario a CRM, Google Sheet, HubSpot, Brevo, Zoho o webhook.</p>
+        </aside>
+        <main class="diag-right">
+          <section class="screen active" id="leadScreen">
+            <h3 class="qtitle">Primero, indique dónde enviar el resultado</h3>
+            <p class="qhelp">Solo pedimos datos mínimos para identificar la empresa y priorizar el seguimiento. El autodiagnóstico no reemplaza una auditoría legal.</p>
+            <div class="form-grid">
+              <div class="field"><label>Nombre</label><input id="leadName" placeholder="Nombre y apellido" autocomplete="name"></div>
+              <div class="field"><label>Email *</label><input id="leadEmail" type="email" placeholder="nombre@empresa.cl" autocomplete="email"></div>
+              <div class="field"><label>Empresa</label><input id="leadCompany" placeholder="Razón social o nombre comercial"></div>
+              <div class="field"><label>Cargo</label><input id="leadRole" placeholder="Gerente, dueño, administración..."></div>
+              <div class="field"><label>Teléfono</label><input id="leadPhone" placeholder="+56 9..."></div>
+              <div class="field"><label>Tamaño empresa</label><select id="leadSize"><option value="">Seleccione</option><option>1-9 trabajadores</option><option>10-49 trabajadores</option><option>50-199 trabajadores</option><option>200+ trabajadores</option></select></div>
+              <div class="field full"><label>Rubro</label><input id="leadIndustry" placeholder="Comercio, servicios, salud, educación, logística, tecnología..."></div>
+            </div>
+            <div class="consent"><label><input id="leadConsent" type="checkbox">Acepto ser contactado por Infobusiness / GL Strategic para recibir el resultado y una recomendación inicial. Entiendo que esta autoevaluación es orientativa.</label></div>
+            <div class="error" id="leadError">Debe ingresar un email válido y aceptar el contacto para continuar.</div>
+            <div class="diag-nav"><span></span><button class="btn btn-primary" onclick="startQuiz()">Continuar al autodiagnóstico</button></div>
+          </section>
+
+          <section class="screen" id="quizScreen">
+            <h3 class="qtitle" id="questionTitle"></h3>
+            <p class="qhelp" id="questionHelp"></p>
+            <div class="options" id="optionsBox"></div>
+            <div class="error" id="quizError">Seleccione una alternativa para continuar.</div>
+            <div class="diag-nav"><button class="btn btn-muted" onclick="prevQuestion()">Volver</button><button class="btn btn-primary" onclick="nextQuestion()" id="nextBtn">Siguiente</button></div>
+          </section>
+
+          <section class="screen" id="resultScreen">
+            <div class="result-panel">
+              <div class="score-card">
+                <div class="ring" id="scoreRing"><div class="ring-inner"><strong id="scoreValue">0</strong><span>puntos</span></div></div>
+                <div class="level" id="scoreLevel">Nivel inicial</div>
+                <div class="result-actions">
+                  <button class="btn btn-teal btn-small" onclick="downloadLead()">Descargar resultado</button>
+                  <button class="btn btn-muted btn-small" onclick="copySummary()">Copiar resumen</button>
+                </div>
+              </div>
+              <div>
+                <h3 class="qtitle" id="resultTitle">Resultado</h3>
+                <p class="qhelp" id="resultText"></p>
+                <div class="priority-list" id="priorityList"></div>
+                <div class="result-actions">
+                  <a class="btn btn-primary" id="mailtoBtn" href="#">Solicitar revisión experta</a>
+                  <a class="btn btn-light" href="#planes">Ver planes sugeridos</a>
+                </div>
+              </div>
+            </div>
+          </section>
+        </main>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="futuro">
+  <div class="wrap">
+    <h2>El futuro de Crece360: de cumplimiento a transformación empresarial</h2>
+    <p class="lead">La protección de datos es el primer gatillador. Desde ahí, GL Strategic y sus asociados pueden cubrir necesidades más amplias de estrategia, gestión, transformación digital, IA, riesgo comercial, formación y ejecución.</p>
+    <div class="road">
+      <div class="road-grid">
+        <div class="road-card"><div class="num">1</div><h3>Empresa Protegida</h3><p>Diagnóstico, plan, kit documental, protocolo de datos, canal, evidencia y capacitación inicial.</p></div>
+        <div class="road-card"><div class="num">2</div><h3>Empresa Preparada</h3><p>Dashboard de cumplimiento, alertas, trazabilidad documental, malla relacional y soporte mensual.</p></div>
+        <div class="road-card"><div class="num">3</div><h3>Empresa Potenciada</h3><p>Riesgo comercial, clientes/proveedores, mora, flujo de caja, tableros ejecutivos e IA documental.</p></div>
+        <div class="road-card"><div class="num">4</div><h3>Transformación 360</h3><p>CAM+, Pré-Futur, estrategia, procesos, cultura, liderazgo, automatización, IA avanzada y gerencia externa.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="capacidades" style="background:#FFFFFF">
+  <div class="wrap">
+    <h2>Capacidades integradas</h2>
+    <p class="lead">La empresa no queda sola con un diagnóstico. La ruta puede avanzar hacia implementación, capacitación y acompañamiento mensual.</p>
+    <div class="grid cols4">
+      <div class="card"><span class="badge dark">Compliance</span><h3>Leyes y evidencia</h3><p>Ley 21.719, Ley 20.393, Ley 21.595, documentación, protocolos, canal, registros y controles.</p></div>
+      <div class="card"><span class="badge dark">Gestión</span><h3>Procesos y tableros</h3><p>Roles, flujos, KPI, seguimiento, mejora continua, productividad y gerencia externa cuando se requiera.</p></div>
+      <div class="card"><span class="badge dark">IA + Digital</span><h3>Automatización útil</h3><p>IA documental, asistentes internos, clasificación de información, dashboards y priorización de acciones.</p></div>
+      <div class="card"><span class="badge dark">OTEC</span><h3>Capacitación trazable</h3><p>Formación para directivos y equipos, con posibilidad de uso de franquicia tributaria SENCE cuando proceda.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="planes">
+  <div class="wrap">
+    <h2>Planes flexibles según realidad y exposición</h2>
+    <p class="lead">El precio final depende de tamaño, rubro, tipo de datos tratados, nivel de documentación existente y profundidad del acompañamiento.</p>
+    <div class="plans">
+      <div class="plan"><span class="badge">Entrada</span><h3>Crece360 Inicial</h3><div class="price">Desde UF 3 + IVA</div><ul><li>Autoevaluación y contacto.</li><li>Diagnóstico inicial orientativo.</li><li>Recomendación de plan.</li><li>Checklist documental básico.</li></ul><a class="btn btn-muted btn-small" href="#autodiagnostico">Comenzar</a></div>
+      <div class="plan featured"><span class="badge red">Recomendado</span><h3>Empresa Protegida 360</h3><div class="price">Plan mensual</div><ul><li>Diagnóstico experto.</li><li>Kit documental y protocolos.</li><li>Canal / proceso de denuncias.</li><li>Protocolo de datos personales.</li><li>Capacitación inicial y soporte.</li></ul><a class="btn btn-primary btn-small" href="#autodiagnostico">Evaluar preparación</a></div>
+      <div class="plan"><span class="badge gold">Evolutivo</span><h3>Transformación 360</h3><div class="price">A medida</div><ul><li>CAM+ y madurez organizacional.</li><li>IA, datos y automatización.</li><li>Riesgo comercial y financiero.</li><li>Gestión, procesos y estrategia.</li><li>Gerencia externa por módulo.</li></ul><a class="btn btn-teal btn-small" href="#autodiagnostico">Solicitar ruta</a></div>
+    </div>
+    <p class="source">Nota: Crece360 es una solución de preparación, revisión inicial y acompañamiento. No constituye certificación legal plena ni defensa jurídica. La elegibilidad de capacitación con franquicia SENCE debe validarse caso a caso.</p>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="wrap">
+    <p><b>Crece360 · Empresa Protegida 360</b><br>Infobusiness · Equifax · GL Strategic · OTEC y aliados especializados. Fuentes normativas de referencia: Ley 21.719, Biblioteca del Congreso Nacional; guía de implementación de datos personales de la Secretaría de Gobierno Digital; franquicia tributaria SENCE.</p>
+  </div>
+</footer>
+<div class="toast" id="toast"></div>
+
+<script>
+const WEBHOOK_URL = ""; // Configurar endpoint real para CRM, Google Apps Script, HubSpot, etc.
+const LEAD_DESTINATION_EMAIL = "comercial@infobusiness.cl"; // Reemplazar antes de publicar.
+let currentQuestion = 0;
+let lead = {};
+let answers = [];
+const questions = [
+  {t:"¿Su empresa sabe qué datos personales trata y dónde están?", h:"Considere datos de clientes, trabajadores, proveedores, postulantes, contactos comerciales o usuarios.", o:[
+    [0,"No lo tenemos levantado","Sabemos que existen datos, pero no hay inventario ni responsable claro."],
+    [1,"Parcialmente","Algunas áreas lo tienen identificado, pero no existe un registro común."],
+    [2,"Sí, existe inventario","Tenemos registro, responsables y ubicación de los datos tratados."]]},
+  {t:"¿Informa finalidad, base de tratamiento y consentimiento cuando corresponde?", h:"La empresa debe poder explicar por qué recolecta datos, para qué los usa y bajo qué autorización.", o:[
+    [0,"No está formalizado","Usamos datos sin política o textos claros para clientes/trabajadores."],
+    [1,"Solo en algunos casos","Hay textos o cláusulas, pero no están actualizados ni controlados."],
+    [2,"Sí, está documentado","Existen políticas, cláusulas y registros de consentimiento o base aplicable."]]},
+  {t:"¿Cuenta con política de privacidad y protocolo de protección de datos?", h:"No basta tener documentos sueltos; deben estar adaptados a la operación real.", o:[
+    [0,"No tenemos documentos","No existe política, protocolo ni registro de tratamientos."],
+    [1,"Tenemos algo básico","Existe una política o cláusula, pero no está ajustada al nuevo estándar."],
+    [2,"Sí, está implementado","Tenemos política, protocolo, responsables y evidencia de aplicación."]]},
+  {t:"¿Existe un procedimiento ante incidentes o filtraciones de datos?", h:"Incluye pérdida de información, accesos no autorizados, correos mal enviados o exposición de datos.", o:[
+    [0,"No existe","No tenemos protocolo ni responsables definidos."],
+    [1,"Existe informalmente","Sabemos a quién avisar, pero no está documentado ni probado."],
+    [2,"Sí, existe y se prueba","Tenemos protocolo, responsables, registro y acciones de contención."]]},
+  {t:"¿Su personal ha recibido capacitación sobre datos y cumplimiento?", h:"La capacitación deja evidencia y reduce errores operativos en el tratamiento de información.", o:[
+    [0,"No","No se ha capacitado al equipo en estas materias."],
+    [1,"Solo algunos cargos","Se han hecho charlas o instrucciones parciales."],
+    [2,"Sí, con registro","Hay capacitación, asistencia documentada y contenidos por rol."]]},
+  {t:"¿Tiene canal o mecanismo para denuncias, reclamos o solicitudes de titulares?", h:"Incluye consultas sobre acceso, rectificación, supresión, oposición, portabilidad o bloqueo de datos.", o:[
+    [0,"No tenemos canal","No existe mecanismo formal para recibir y responder."],
+    [1,"Tenemos canales generales","Se reciben por correo o web, pero sin flujo ni trazabilidad."],
+    [2,"Sí, con trazabilidad","Existe canal, responsable, plazos y registro de respuestas."]]},
+  {t:"¿Sus clientes grandes, bancos o mandantes le piden evidencia de cumplimiento?", h:"Este punto mide riesgo comercial: perder licitaciones, contratos o evaluación de proveedores.", o:[
+    [0,"No lo sabemos","No hemos revisado exigencias de clientes o mandantes."],
+    [1,"A veces","Algunos clientes piden declaraciones, anexos o políticas."],
+    [2,"Sí, frecuentemente","Debemos demostrar cumplimiento para contratar, licitar o renovar."]]},
+  {t:"¿La empresa está preparada para usar datos e IA con control?", h:"La madurez digital importa: automatización e IA aumentan productividad, pero también exigen gobierno de datos.", o:[
+    [0,"No hay control","Se usan planillas, correos o IA sin criterios claros."],
+    [1,"Hay iniciativas aisladas","Existen herramientas, pero sin política, KPI ni responsable común."],
+    [2,"Sí, con gobierno","Hay roles, procesos, controles, datos y prioridades de transformación."]]},
+];
+function emailValid(v){return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)}
+function setProgress(pct){document.getElementById('progressBar').style.width=pct+'%'}
+function activateStep(name){['stepLead','stepQuiz','stepResult'].forEach(id=>document.getElementById(id).classList.remove('active'));document.getElementById(name).classList.add('active')}
+function showScreen(id){['leadScreen','quizScreen','resultScreen'].forEach(s=>document.getElementById(s).classList.remove('active'));document.getElementById(id).classList.add('active')}
+function startQuiz(){
+  const email=document.getElementById('leadEmail').value.trim();
+  const consent=document.getElementById('leadConsent').checked;
+  if(!emailValid(email)||!consent){document.getElementById('leadError').style.display='block';return}
+  document.getElementById('leadError').style.display='none';
+  lead={
+    nombre:document.getElementById('leadName').value.trim(),email,empresa:document.getElementById('leadCompany').value.trim(),cargo:document.getElementById('leadRole').value.trim(),telefono:document.getElementById('leadPhone').value.trim(),tamano:document.getElementById('leadSize').value,rubro:document.getElementById('leadIndustry').value.trim(),fecha:new Date().toISOString()
+  };
+  currentQuestion=0; answers=[]; showScreen('quizScreen'); activateStep('stepQuiz'); renderQuestion();
+}
+function renderQuestion(){
+  const q=questions[currentQuestion];
+  document.getElementById('questionTitle').textContent=(currentQuestion+1)+'. '+q.t;
+  document.getElementById('questionHelp').textContent=q.h;
+  const box=document.getElementById('optionsBox'); box.innerHTML='';
+  q.o.forEach((op,idx)=>{const btn=document.createElement('button');btn.className='opt'+(answers[currentQuestion]?.idx===idx?' selected':'');btn.innerHTML=`<span class="radio"></span><span><strong>${op[1]}</strong><span>${op[2]}</span></span>`;btn.onclick=()=>{answers[currentQuestion]={idx,score:op[0],label:op[1],question:q.t}; renderQuestion();};box.appendChild(btn);});
+  document.getElementById('nextBtn').textContent=currentQuestion===questions.length-1?'Ver resultado':'Siguiente';
+  setProgress(18+((currentQuestion+1)/questions.length)*52);
+}
+function nextQuestion(){
+  if(!answers[currentQuestion]){document.getElementById('quizError').style.display='block';return}
+  document.getElementById('quizError').style.display='none';
+  if(currentQuestion<questions.length-1){currentQuestion++;renderQuestion()}else{showResult()}
+}
+function prevQuestion(){
+  if(currentQuestion===0){showScreen('leadScreen');activateStep('stepLead');setProgress(8)} else {currentQuestion--;renderQuestion()}
+}
+function showResult(){
+  const raw=answers.reduce((a,b)=>a+b.score,0); const score=Math.round(raw/(questions.length*2)*100);
+  let level,title,text,priorities=[];
+  if(score<35){level='Empresa en riesgo'; title='Su empresa requiere preparación urgente'; text='El resultado indica brechas relevantes de documentación, responsabilidades y evidencia. Conviene partir con un diagnóstico experto y un plan mínimo de cumplimiento.';}
+  else if(score<65){level='Empresa vulnerable'; title='Su empresa tiene avances, pero aún no puede demostrar suficiente preparación'; text='Existen bases parciales, pero falta trazabilidad, actualización o control operativo. Se recomienda ordenar datos, documentos y capacitación.';}
+  else if(score<85){level='Empresa en preparación'; title='Su empresa tiene una base razonable'; text='Hay avances relevantes. El foco debe estar en cerrar brechas, robustecer evidencia y preparar respuesta frente a auditorías o clientes grandes.';}
+  else {level='Empresa avanzada'; title='Su empresa muestra buena preparación inicial'; text='El siguiente paso es validar evidencia, mantener actualización y evaluar capacidades de IA, datos y gestión para mejorar madurez empresarial.';}
+  answers.forEach((a,i)=>{if(a.score<2) priorities.push({q:a.question, p:i<6?'Cumplimiento y evidencia':'Gestión y digitalización'});});
+  priorities=priorities.slice(0,4);
+  document.getElementById('scoreValue').textContent=score;
+  document.getElementById('scoreLevel').textContent=level;
+  document.getElementById('resultTitle').textContent=title;
+  document.getElementById('resultText').textContent=text;
+  document.getElementById('scoreRing').style.background=`conic-gradient(${score<35?'#B20D30':score<65?'#F5B84B':'#00A99D'} 0deg, ${score<35?'#B20D30':score<65?'#F5B84B':'#00A99D'} ${Math.round(score*3.6)}deg, #E6ECF2 ${Math.round(score*3.6)}deg 360deg)`;
+  const list=document.getElementById('priorityList');list.innerHTML='';
+  priorities.forEach(p=>{const div=document.createElement('div');div.className='priority';div.innerHTML=`<b>${p.p}</b><span>${p.q}</span>`;list.appendChild(div)});
+  if(!priorities.length){const div=document.createElement('div');div.className='priority';div.innerHTML='<b>Validación experta</b><span>Su resultado es alto; conviene revisar evidencia y preparar mantención del sistema.</span>';list.appendChild(div)}
+  const payload=buildPayload(score,level,priorities);
+  localStorage.setItem('crece360_last_lead',JSON.stringify(payload));
+  trySubmit(payload);
+  const body=encodeURIComponent(`Nuevo lead Crece360\n\nEmpresa: ${lead.empresa}\nNombre: ${lead.nombre}\nEmail: ${lead.email}\nCargo: ${lead.cargo}\nTeléfono: ${lead.telefono}\nTamaño: ${lead.tamano}\nRubro: ${lead.rubro}\nScore: ${score}\nNivel: ${level}\n\nPrioridades:\n${priorities.map(x=>'- '+x.q).join('\n')}`);
+  document.getElementById('mailtoBtn').href=`mailto:${LEAD_DESTINATION_EMAIL}?subject=Lead Crece360 - ${encodeURIComponent(lead.empresa||lead.email)}&body=${body}`;
+  showScreen('resultScreen');activateStep('stepResult');setProgress(100);toast('Resultado generado. Lead guardado en modo local.');
+}
+function buildPayload(score,level,priorities){return {lead,score,level,prioridades:priorities,respuestas:answers.map((a,i)=>({pregunta:questions[i].t,respuesta:a.label,puntaje:a.score})),fuente:'Crece360 landing',fecha:new Date().toISOString()}}
+async function trySubmit(payload){ if(!WEBHOOK_URL) return; try{await fetch(WEBHOOK_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});toast('Lead enviado correctamente.')}catch(e){toast('No se pudo enviar al endpoint. Lead guardado localmente.')} }
+function downloadLead(){const payload=localStorage.getItem('crece360_last_lead')||'{}';const blob=new Blob([payload],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='crece360_autodiagnostico_'+(lead.empresa||lead.email||'lead').replace(/[^a-z0-9_-]/gi,'_')+'.json';a.click();URL.revokeObjectURL(a.href)}
+function copySummary(){const payload=JSON.parse(localStorage.getItem('crece360_last_lead')||'{}');const txt=`Crece360 - ${payload.lead?.empresa||''}\nEmail: ${payload.lead?.email||''}\nScore: ${payload.score}\nNivel: ${payload.level}\nPrioridades:\n${(payload.prioridades||[]).map(x=>'- '+x.q).join('\n')}`;navigator.clipboard.writeText(txt).then(()=>toast('Resumen copiado.'))}
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.style.display='block';setTimeout(()=>t.style.display='none',3500)}
+setProgress(8);
+</script>
+</body>
+</html>

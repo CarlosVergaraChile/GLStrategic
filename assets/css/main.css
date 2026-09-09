@@ -1,0 +1,143 @@
+/* RESET & BASE */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Montserrat', sans-serif; line-height: 1.8; color: #1a1a1a; background: #ffffff; }
+h1, h2, h3, h4, h5, h6 { font-weight: 700; line-height: 1.3; margin-bottom: 1rem; }
+p { margin-bottom: 1rem; }
+a { color: inherit; text-decoration: none; }
+
+/* ChileconTodo-style larger type overrides (significantly larger) */
+.text-xs { font-size: 1.6rem; }
+.text-sm { font-size: 2.2rem; }
+
+/* Video Fondo */
+.video-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; z-index: -1; }
+.video-bg { width: 100%; height: 100%; object-fit: cover; }
+
+/* Parallax */
+.parallax { background-attachment: fixed; background-position: center; background-repeat: no-repeat; background-size: cover; position: relative; }
+
+
+/* FLIP CARD 3D */
+.flip-card {
+    background-color: transparent;
+    perspective: 1000px;
+    height: 320px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.flip-card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    transition: transform 1s cubic-bezier(0.4,0.2,0.2,1.1);
+    transform-style: preserve-3d;
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.08);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+.flip-card:hover .flip-card-inner, .flip-card:focus .flip-card-inner {
+    transform: rotateY(180deg);
+}
+.flip-card-front, .flip-card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+}
+.flip-card:focus {
+    outline: 2px solid #00A3E0;
+    outline-offset: 2px;
+}
+
+/* Compact variant for lighter grids (ChileconTodo style) */
+.flip-card.compact {
+    height: 200px;
+}
+
+/* Frente: Blanco limpio */
+.flip-card-front {
+    background: #ffffff;
+    color: #002040;
+    border-top: 5px solid #00A3E0;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+    backface-visibility: hidden;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+/* Dorso: Degradado Sutil */
+.flip-card-back {
+    background: linear-gradient(135deg, #002040 0%, #0055aa 100%);
+    color: white;
+    transform: rotateY(180deg);
+    backface-visibility: hidden;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    padding: 20px;
+    overflow: hidden;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+}
+/* Variantes de Color */
+.orange-card .flip-card-front { border-top-color: #FF6600; }
+.orange-card .flip-card-back { background: linear-gradient(135deg, #FF6600 0%, #d94600 100%); }
+
+/* Fotos Equipo */
+.team-img { width: 120px; height: 120px; border-radius: 50%; object-fit: contain; object-position: center center; border: 4px solid white; box-shadow: 0 4px 12px rgba(0,0,0,0.15); margin-bottom: 12px; filter: grayscale(0%) brightness(1.0) contrast(1.1); transition: all 0.3s ease; background: white; }
+.team-img:hover { filter: brightness(1.05) contrast(1.15); }
+.team-img-principal { box-shadow: 0 0 0 3px #00A3E0, 0 4px 12px rgba(0,0,0,0.15); filter: grayscale(0%) !important; }
+.team-card { height: 340px; }
+
+/* Centrado vertical en flipcard equipo */
+.team-card .flip-card-front {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+/* Botones */
+.btn-cct { background: #00A3E0; color: white; padding: 13px 32px; border-radius: 6px; font-weight: 700; text-transform: uppercase; font-size: 0.875rem; letter-spacing: 0.5px; transition: 0.3s ease; box-shadow: 0 4px 12px rgba(0, 163, 224, 0.2); }
+.btn-cct:hover { background: #0087b8; transform: translateY(-1px); box-shadow: 0 6px 16px rgba(0, 163, 224, 0.3); }
+
+/* Boton Activo Tabs */
+.tab-btn.active { background-color: white !important; color: #002040 !important; border-color: white !important; font-weight: 700; }
+
+/* Diagrama CAM - Texto Blanco */
+img[src*="Diagrama_CAM"] { filter: brightness(1.1); }
+img[src*="Diagrama_CAM_glass.png"] { color: white; }
+
+/* News Card Dinámicas */
+.news-card {
+    transition: all 0.3s ease;
+    border: 1px solid #e5e7eb;
+}
+.news-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(0, 163, 224, 0.15);
+    border-color: #00A3E0;
+}
